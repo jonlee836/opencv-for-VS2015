@@ -48,44 +48,10 @@ int main(int argc, const char* argv[])
 		}
 		else if (playAll == true) {
 			INPUT_IMAGE = a.getVideoInput();
+			cvtColor(INPUT_IMAGE, INPUT_IMAGE, CV_BGR2Luv);
 			cv::imshow("imgFrame", INPUT_IMAGE);
 		}
-
 	}
-
-
-	/*InputStream.open("C:\\opencv\\projects\\people detection\\peopleWalking.avi");
-
-	int Input_Width = static_cast<int>(InputStream.get(CV_CAP_PROP_FRAME_WIDTH));
-	int Input_Height = static_cast<int>(InputStream.get(CV_CAP_PROP_FRAME_HEIGHT));
-
-	if (!InputStream.isOpened()){
-		std::cout << "\nerror reading video file" << std::endl << std::endl;
-		_getch();
-		return(0);
-	}
-
-	if (InputStream.get(CV_CAP_PROP_FRAME_COUNT) < 1) {
-		std::cout << "\nerror: video file must have at least one frame";
-		_getch();
-		return(0);
-	}
-
-	InputStream.read(INPUT_IMAGE);
-	cv::imshow("imgFrame", INPUT_IMAGE);*/
-
-	//while (InputStream.isOpened() && chCheckForEscKey != 27) {
-
-	//	cv::imshow("imgFrame", INPUT_IMAGE);
-	//	if ((InputStream.get(CV_CAP_PROP_POS_FRAMES) + 1) < InputStream.get(CV_CAP_PROP_FRAME_COUNT)) {       // if there is at least one more frame
-	//		InputStream.read(INPUT_IMAGE);                            // read it
-	//	}
-	//	else {                                                  // else
-	//		std::cout << "end of video\n";                      // show end of video message
-	//		break;                                              // and jump out of while loop
-	//	}
-	//	chCheckForEscKey = cv::waitKey(100);      // get key press in case user pressed esc
-	//}
 
 	return(0);
 
