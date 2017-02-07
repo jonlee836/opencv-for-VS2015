@@ -16,13 +16,12 @@ class carDetect {
 
 private:
 
-	const int maxNumb = 10;
-
-	Point pointArray[];
+	Point pointArray[10];
 
 public:
 
-
+	void colorspace(Mat& a);
+	
 };
 
 

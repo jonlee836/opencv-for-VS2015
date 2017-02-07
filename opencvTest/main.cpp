@@ -18,17 +18,15 @@ const char* keys =
 	"{ h help  | | print this help           }"
 };
 
-int main(int argc, const char* argv[])
+int main(int argc, char** argv)
 {
 
 	bool playAll = true;
 	char chCheckForEscKey = 0;
 
-	double FPS = 10.0;
-
 	String inputPath = "C:\\opencv\\projects\\people detection\\peopleWalking.avi";
 
-	cv::Mat INPUT_IMAGE;
+	cv::Mat InputImage;
 	cv::VideoCapture InputStream;
 
 	parseInput a(inputPath);
@@ -47,9 +45,8 @@ int main(int argc, const char* argv[])
 			else                 {playAll = true;}
 		}
 		else if (playAll == true) {
-			INPUT_IMAGE = a.getVideoInput();
-			cvtColor(INPUT_IMAGE, INPUT_IMAGE, CV_BGR2Luv);
-			cv::imshow("imgFrame", INPUT_IMAGE);
+			InputImage = a.getVideoInput();
+			cv::imshow("imgFrame", InputImage);
 		}
 	}
 
