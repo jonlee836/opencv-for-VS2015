@@ -82,7 +82,6 @@ int main(int argc, char** argv)
 				cout << name << endl;
 
 				InputImage = imread(name);
-				imshow("img", InputImage);
 
 				threshImg.colorspace(InputImage);
 
