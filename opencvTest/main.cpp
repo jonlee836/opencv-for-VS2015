@@ -7,12 +7,13 @@
 #include <conio.h>
 #include <string>
 #include <algorithm>
+#include <experimental/filesystem>
 
 #include "parseVideoInput.h"
 #include "parseImageInput.h"
 #include "analyzePoints.h"
 #include "thresholdImage.h"
-#include <experimental/filesystem>
+#include "tinydir.h"
 
 namespace fs  = std::tr2::sys;
 using namespace cv;
@@ -36,35 +37,19 @@ int main(int argc, char** argv)
 	//a.check_filepath();
 
 	String inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic";
+	vector <string> imagepathArray;
 
 	cv::Mat InputImage;
 	cv::VideoCapture InputStream;
-
-	threshImage threshImg;
-	
-	const char *cstr1a = "Hello Out There.";
-
-	basic_string <char> str1a(inputPath);
 	
 	//cout << "The string initialized by C-string cstr1a is: " << str1a << endl;
 
 	//fs::path::string_type foo = "C:/opencv/projects/car detection/M6_Motorway_Traffic";
+	threshImage threshImg;
+	parseImageInput imgIO(inputPath);
+	//imgIO.ListAllFilesInDir();
+	totalframes = imgIO.get_filenames();
 
-	//parseImageInput imgIO(inputPath);
-
-	int i = std::count_if(fs::directory_iterator(str1a),
-		fs::directory_iterator(),
-		[](const fs::directory_entry& e) {
-		return e.path().extension() == ".jpg";
-	});
-
-	std::cout << "input path : " << inputPath << " " << i << std::endl;
-
-	/*for (auto& p : fs::directory_iterator(inputPath))
-		std::cout << p << '\n';
-	*/
-	//totalframes = imgIO.get_filenames();
-	//cout << "C:\\opencv\\projects\\car detection\\M6_Motorway_Traffic" << " " << totalframes << '\n';
 	/*while (true){
 
 		int k = waitKey(100);

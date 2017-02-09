@@ -4,7 +4,9 @@
 #define PARSEIMAGEINPUT_H
 
 #include <iostream>
+#include <vector>
 #include <string>
+#include <Windows.h>
 #include<conio.h> 
 
 #include <opencv2\core\core.hpp>
@@ -13,6 +15,8 @@
 
 #include <experimental/filesystem> 
 
+namespace fs = std::tr2::sys;
+
 using namespace cv;
 using namespace std;
 
@@ -20,19 +24,21 @@ class parseImageInput {
 
 private:
 
-	unsigned int totalFrames = 1;
+	vector <string> imgNames;
+
+	unsigned int totalFrames = 0;
+
 	int currFramePos = -1;
 	int Input_Width = -1;
 	int Input_Height = -1;
 
 	String filepath;
 
-	vector <string> imagepathArray;
-
 public:
 
 	parseImageInput(String filepath_);
 
+	vector<string> getfiles(string folder);
 	int get_filenames();
 
 };
