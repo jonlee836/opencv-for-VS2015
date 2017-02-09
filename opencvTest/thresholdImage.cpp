@@ -8,6 +8,7 @@ void threshImage::colorspace(Mat& a) {
 	cvtColor(a, a, CV_BGR2Luv);
 	split(a, LuvChannels);
 
+	imshow("window", a);
 	imshow("L channel", LuvChannels[0]);
 	imshow("U channel", LuvChannels[1]);
 	imshow("V channel", LuvChannels[2]);

@@ -20,9 +20,9 @@ vector<string> parseImageInput::getfiles(wchar_t *folder)
 	std::vector<std::string> vec;
 
 	WIN32_FIND_DATA ffd;
-
 	LPCWSTR foo = (LPCWSTR)folder;
 	HANDLE handle = FindFirstFile(foo, &ffd);
+
 	if (handle != INVALID_HANDLE_VALUE)
 	{
 		do {
@@ -37,10 +37,6 @@ vector<string> parseImageInput::getfiles(wchar_t *folder)
 
 		} while (FindNextFile(handle, &ffd));
 		FindClose(handle);
-	}
-	else
-	{
-		OutputDebugString(L"Nothing to display \n");
 	}
 
 	FindClose(handle);

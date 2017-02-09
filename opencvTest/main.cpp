@@ -4,6 +4,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <chrono>
 #include <conio.h>
 #include <string>
 #include <Windows.h>
@@ -32,10 +33,9 @@ int main(int argc, char** argv)
 	string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic/";
 	wchar_t *directory = L"C:/opencv/projects/car detection/M6_Motorway_Traffic/*.*";
 
-	int totalframes;
-	bool playAll = true;
+	bool Allimg = true;
 	char chCheckForEscKey = 0;
-	
+
 	/*"C:\\opencv\\projects\\people detection\\peopleWalking.avi"
 	C:\opencv\projects\car detection\M6_Motorway_Traffic
 	parseVideoInput a(inputPath);
@@ -45,37 +45,58 @@ int main(int argc, char** argv)
 
 	cv::Mat InputImage;
 	cv::VideoCapture InputStream;
-	parseImageInput imgIO(inputPath);
+
 	threshImage threshImg;
+
+	parseImageInput imgIO(inputPath);
 	imagepathArray = imgIO.getfiles(directory);
 
-	for (unsigned int i = 0; i < imagepathArray.size(); i++){
-		cout << imagepathArray[i] << endl;
+	for (int i = 0; i < imagepathArray.size();) {
+
+		string name = inputPath + imagepathArray[i];
+
+		while (true) {
+			int k = waitKey(1);
+
+			if (char(k) == '1') { // re-process current frame
+				Allimg = false;
+
+				string name = inputPath + imagepathArray[i];
+				cout << name << endl;
+
+				InputImage = imread(name);
+				threshImg.colorspace(InputImage);
+
+				//i++;
+			}
+			else if (char(k) == '2') { Allimg = true; }
+			else if (char(k) == 'b' && i > 1) {
+				i--;
+				name = inputPath + imagepathArray[i];
+				InputImage = imread(name);
+				threshImg.colorspace(InputImage);
+
+				break;
+			}
+			else if (char(k) == 'n' && i < imagepathArray.size()) {i++; break; }
+			else if (char(k) == 'q') { i = imagepathArray.size(); break; }
+			else if (Allimg == true) {
+
+				string name = inputPath + imagepathArray[i];
+
+				cout << name << endl;
+
+				InputImage = imread(name);
+				threshImg.colorspace(InputImage);
+
+				i++;
+
+				break;
+			}
+		}
 	}
 
 	cout << "number of images : " << imagepathArray.size() << endl;
-	/*parseImageInput imgIO(inputPath);
-	imgIO.ListAllFilesInDir();
-	totalframes = imgIO.get_filenames();*/
-
-	/*while (true){
-
-		int k = waitKey(100);
-
-		if (char(k) == 'q') {break;}
-		else if (char(k) == 'b' ) {
-			
-		}
-		else if (char(k) == 't') {
-			if (playAll == true) {playAll = false;}
-			else                 {playAll = true;}
-		}
-		else if (playAll == true) {
-			InputImage = a.getVideoInput();
-			threshImg.colorspace(InputImage);
-			cv::imshow("imgFrame", InputImage);
-		}
-	}*/
 
 	return(0);
 
