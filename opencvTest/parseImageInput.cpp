@@ -1,9 +1,9 @@
 #include "parseImageInput.h"
 
-//parseImageInput::parseImageInput(string filepath_) {
-//	filepath = filepath_;
-//}
-//
+parseImageInput::parseImageInput(string filepath_) {
+	filepath = filepath_;
+}
+
 //int parseImageInput::get_filenames()
 //{
 //	basic_string <char> filepath_bs(filepath);
@@ -15,30 +15,34 @@
 //	return totalFrames;
 //}
 
-//vector<string> parseImageInput::getfiles(string folder)
-//{
-//	vector<string> names;
-//	string search_path = folder + "/*.*";
-//
-//	WIN32_FIND_DATA fd;
-//	HANDLE hFind = ::FindFirstFile((LPWSTR)search_path.c_str, &fd);
-//	if (hFind != INVALID_HANDLE_VALUE) {
-//		do {
-//			// read all (real) files in current folder
-//			// , delete '!' read other 2 default folder . and ..
-//			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-//				
-//				wchar_t* foo = fd.cFileName;
-//				wstring ws(foo);
-//				string bar(ws.begin(), ws.end());
-//
-//				names.push_back(bar);
-//
-//				cout << bar << endl;
-//
-//			}
-//		} while (::FindNextFile(hFind, &fd));
-//		::FindClose(hFind);
-//	}
-//	return names;
-//}
+vector<string> parseImageInput::getfiles(wchar_t *folder)
+{
+	std::vector<std::string> vec;
+
+	WIN32_FIND_DATA ffd;
+
+	LPCWSTR foo = (LPCWSTR)folder;
+	HANDLE handle = FindFirstFile(foo, &ffd);
+	if (handle != INVALID_HANDLE_VALUE)
+	{
+		do {
+
+			wstring tmp = ffd.cFileName;
+			string newstr(tmp.begin(), tmp.end());
+			if (newstr.length() > 5) {
+				vec.push_back(newstr);
+			}
+
+		} while (FindNextFile(handle, &ffd));
+		FindClose(handle);
+	}
+	else
+	{
+		OutputDebugString(L"Nothing to display \n");
+	}
+
+	FindClose(handle);
+
+	return vec;
+}
+

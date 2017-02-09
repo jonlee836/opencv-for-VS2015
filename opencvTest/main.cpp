@@ -7,7 +7,6 @@
 #include <conio.h>
 #include <string>
 #include <Windows.h>
-#include <algorithm>
 #include <experimental/filesystem>
 
 #include "parseVideoInput.h"
@@ -30,76 +29,34 @@ const char* keys =
 int main(int argc, char** argv)
 {
 
-	std::vector<std::wstring> vec;
-
+	string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic/";
 	wchar_t *directory = L"C:/opencv/projects/car detection/M6_Motorway_Traffic/*.*";
-	WIN32_FIND_DATA ffd;
-	HANDLE handle = FindFirstFile(directory, &ffd);
-	if (handle != INVALID_HANDLE_VALUE)
-	{
-		do {
-			vec.push_back(ffd.cFileName);
-		} while (FindNextFile(handle, &ffd));
-		FindClose(handle);
+
+	int totalframes;
+	bool playAll = true;
+	char chCheckForEscKey = 0;
+	
+	/*"C:\\opencv\\projects\\people detection\\peopleWalking.avi"
+	C:\opencv\projects\car detection\M6_Motorway_Traffic
+	parseVideoInput a(inputPath);
+	a.check_filepath();*/
+
+	vector<string> imagepathArray;
+
+	cv::Mat InputImage;
+	cv::VideoCapture InputStream;
+	parseImageInput imgIO(inputPath);
+	threshImage threshImg;
+	imagepathArray = imgIO.getfiles(directory);
+
+	for (unsigned int i = 0; i < imagepathArray.size(); i++){
+		cout << imagepathArray[i] << endl;
 	}
-	else
-	{
-		OutputDebugString(L"Nothing to display \n");
-	}
 
-	for (unsigned int i = 0; i < vec.size(); i++)
-	{
-		string foo(vec[i].begin(), vec[i].end());
-		cout << foo << endl;
-	}
-
-	cout << vec.size() << endl;
-	getchar();
-
-	//int totalframes;
-	//bool playAll = true;
-	//char chCheckForEscKey = 0;
-	//
-	//"C:\\opencv\\projects\\people detection\\peopleWalking.avi"
-	//C:\opencv\projects\car detection\M6_Motorway_Traffic
-	//parseVideoInput a(inputPath);
-	//a.check_filepath();
-
-	//string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic";
-	//vector <string> imagepathArray;
-
-	//cv::Mat InputImage;
-	//cv::VideoCapture InputStream;
-
-	//threshImage threshImg;
-
-	//const char *cstr1a = "Hello Out There.";
-
-	//basic_string <char> str1a(inputPath);
-
-	//cout << "The string initialized by C-string cstr1a is: " << str1a << endl;
-
-	//fs::path::string_type foo = "C:/opencv/projects/car detection/M6_Motorway_Traffic";
-
-	//parseImageInput imgIO(inputPath);
-
-	/*int i = std::count_if(fs::directory_iterator(str1a),
-		fs::directory_iterator(),
-		[](const fs::directory_entry& e) {
-		cout << e << endl;
-		return e.path().extension() == ".jpg";
-	});*/
-
-	//for (auto& p : fs::directory_iterator(inputPath)){
-	//	path foo(inputPath);
-	//	std::cout << p.path() << '\n';
-	//}
-
-	//cout << "The string initialized by C-string cstr1a is: " << str1a << endl;
-
-	//parseImageInput imgIO(inputPath);
-	//imgIO.ListAllFilesInDir();
-	//totalframes = imgIO.get_filenames();
+	cout << "number of images : " << imagepathArray.size() << endl;
+	/*parseImageInput imgIO(inputPath);
+	imgIO.ListAllFilesInDir();
+	totalframes = imgIO.get_filenames();*/
 
 	/*while (true){
 
