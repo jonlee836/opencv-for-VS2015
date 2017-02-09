@@ -6,7 +6,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <Windows.h>
 #include<conio.h> 
 
 #include <opencv2\core\core.hpp>
@@ -15,9 +14,6 @@
 
 #include <experimental/filesystem> 
 
-namespace fs = std::tr2::sys;
-
-using namespace cv;
 using namespace std;
 
 class parseImageInput {
@@ -32,15 +28,15 @@ private:
 	int Input_Width = -1;
 	int Input_Height = -1;
 
-	String filepath;
+	string filepath;
 
 public:
 
-	parseImageInput(String filepath_);
+	//parseImageInput(string filepath_);
 
-	vector<string> getfiles(string folder);
-	int get_filenames();
+	//vector<string> getfiles(string folder);
+	//int get_filenames();
 
 };
 
-#endif // !PARSEVIDEOINPUT_H
+#endif // !PARSEIMAGEINPUT_H
