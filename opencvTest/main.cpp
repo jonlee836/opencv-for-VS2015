@@ -21,12 +21,6 @@ using namespace cv;
 
 namespace fs = std::tr2::sys;
 
-const char* keys =
-{
-	"{ b build | | print complete build info }"
-	"{ h help  | | print this help           }"
-};
-
 int main(int argc, char** argv)
 {
 
@@ -74,12 +68,13 @@ int main(int argc, char** argv)
 				i--;
 				name = inputPath + imagepathArray[i];
 				InputImage = imread(name);
+				
 				threshImg.colorspace(InputImage);
 
 				break;
 			}
 			else if (char(k) == 'n' && i < imagepathArray.size()) {i++; break; }
-			else if (char(k) == 'q') { i = imagepathArray.size(); break; }
+			else if (char(k) == 'q') { return 0; }
 			else if (Allimg == true) {
 
 				string name = inputPath + imagepathArray[i];
@@ -87,6 +82,8 @@ int main(int argc, char** argv)
 				cout << name << endl;
 
 				InputImage = imread(name);
+				imshow("img", InputImage);
+
 				threshImg.colorspace(InputImage);
 
 				i++;

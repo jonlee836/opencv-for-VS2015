@@ -13,26 +13,17 @@ bool parseVideoInput::check_filepath() {
 
 	if (!InputStream.isOpened()) {
 		std::cout << "\nerror reading video file" << std::endl << std::endl;
-		_getch();
 
 		return false;
 	}
 
 	if (InputStream.get(CV_CAP_PROP_FRAME_COUNT) < 1) {
 		std::cout << "\nerror: video file must have at least one frame";
-		_getch();
 
 		return false;
 	}
 
-	Input_Width = static_cast<int>(InputStream.get(CV_CAP_PROP_FRAME_WIDTH));
-	Input_Height = static_cast<int>(InputStream.get(CV_CAP_PROP_FRAME_HEIGHT));
-
 	frameCount = InputStream.get(CV_CAP_PROP_FRAME_COUNT);
-
-	cout << "frame count : " << frameCount << endl;
-	cout << "frame width : " << Input_Width << endl;
-	cout << "frame height : " << Input_Height << endl;
 
 	return true;
 }

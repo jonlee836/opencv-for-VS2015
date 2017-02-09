@@ -5,12 +5,14 @@ using namespace std;
 
 void threshImage::colorspace(Mat& a) {
 
-	cvtColor(a, a, CV_BGR2Luv);
-	split(a, LuvChannels);
+	//cv::imshow("window", a);
 
-	imshow("window", a);
+	cvtColor(a, a, CV_BGR2GRAY);
+	//imshow("gray", a);
+	/*split(a, LuvChannels);
+
 	imshow("L channel", LuvChannels[0]);
 	imshow("U channel", LuvChannels[1]);
-	imshow("V channel", LuvChannels[2]);
+	imshow("V channel", LuvChannels[2]);*/
 
 }
