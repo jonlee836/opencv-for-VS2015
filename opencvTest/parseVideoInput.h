@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PARSEINPUT_H
-#define PARSEINPUT_H
+#ifndef PARSEVIDEOINPUT_H
+#define PARSEVIDEOINPUT_H
 
 #include <iostream>
 #include <string>
@@ -15,7 +15,7 @@
 using namespace cv;
 using namespace std;
 
-class parseInput {
+class parseVideoInput {
 
 private:
 
@@ -30,7 +30,7 @@ private:
 
 public:
 
-	parseInput(String filepath_);
+	parseVideoInput(String filepath_);
 
 	bool check_filepath();
 	bool isStreamOpen();
@@ -41,4 +41,4 @@ public:
 
 };
 
-#endif // !PARSEINPUT_H
+#endif // !PARSEVIDEOINPUT_H

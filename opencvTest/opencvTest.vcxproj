@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClCompile Include="analyzePoints.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="parseInput.cpp" />
+    <ClCompile Include="parseImageInput.cpp" />
+    <ClCompile Include="parseVideoInput.cpp" />
     <ClCompile Include="thresholdImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="analyzePoints.h" />
-    <ClInclude Include="parseInput.h" />
+    <ClInclude Include="parseImageInput.h" />
+    <ClInclude Include="parseVideoInput.h" />
     <ClInclude Include="thresholdImage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

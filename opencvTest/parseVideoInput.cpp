@@ -1,13 +1,13 @@
-#include "parseInput.h"
+#include "parseVideoInput.h"
 
 using namespace cv;
 using namespace std;
 
-parseInput::parseInput(String filepath_) {
+parseVideoInput::parseVideoInput(String filepath_) {
 	filepath = filepath_;
 }
 
-bool parseInput::check_filepath() {
+bool parseVideoInput::check_filepath() {
 
 	InputStream.open(filepath);
 
@@ -37,7 +37,7 @@ bool parseInput::check_filepath() {
 	return true;
 }
 
-bool parseInput::isStreamOpen() {
+bool parseVideoInput::isStreamOpen() {
 
 	if (InputStream.isOpened()) {
 		return true;
@@ -47,11 +47,11 @@ bool parseInput::isStreamOpen() {
 	}
 }
 
-int parseInput::getCurrframe() {
+int parseVideoInput::getCurrframe() {
 	return currFramePos;
 }
 
-Mat parseInput::getVideoInput()
+Mat parseVideoInput::getVideoInput()
 {
 	Mat inputImg;
 

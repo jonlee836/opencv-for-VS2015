@@ -24,7 +24,10 @@
     <ClCompile Include="thresholdImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parseInput.cpp">
+    <ClCompile Include="parseImageInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parseVideoInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +38,10 @@
     <ClInclude Include="thresholdImage.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="parseInput.h">
+    <ClInclude Include="parseVideoInput.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parseImageInput.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,11 +2,14 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include <filesystem>
 #include <iostream>
+#include <conio.h>
 #include <string>
-#include<conio.h> 
 
-#include "parseInput.h"
+#include <direct.h>
+
+#include "parseVideoInput.h"
 #include "analyzePoints.h"
 #include "thresholdImage.h"
 
@@ -23,14 +26,23 @@ int main(int argc, char** argv)
 
 	bool playAll = true;
 	char chCheckForEscKey = 0;
+	
+	//"C:\\opencv\\projects\\people detection\\peopleWalking.avi"
+	//C:\opencv\projects\car detection\M6_Motorway_Traffic
 
-	String inputPath = "C:\\opencv\\projects\\people detection\\peopleWalking.avi";
+	String inputPath = "C:\opencv\projects\car detection\M6_Motorway_Traffic";
 
 	cv::Mat InputImage;
 	cv::VideoCapture InputStream;
 
-	parseInput a(inputPath);
+	threshImage threshImg;
+	parseVideoInput a(inputPath);
 	a.check_filepath();
+
+	for (int i = 1; i < argc;) {
+		String name = argv[i];
+		cout << name << endl;
+	}
 
 	while (true){
 
@@ -46,6 +58,7 @@ int main(int argc, char** argv)
 		}
 		else if (playAll == true) {
 			InputImage = a.getVideoInput();
+			threshImg.colorspace(InputImage);
 			cv::imshow("imgFrame", InputImage);
 		}
 	}
