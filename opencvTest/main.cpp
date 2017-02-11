@@ -30,20 +30,15 @@ int main(int argc, char** argv)
 	bool Allimg = true;
 	char chCheckForEscKey = 0;
 
-	/*"C:\\opencv\\projects\\people detection\\peopleWalking.avi"
-	C:\opencv\projects\car detection\M6_Motorway_Traffic
-	parseVideoInput a(inputPath);
-	a.check_filepath();*/
-
 	vector<string> imagepathArray;
 
 	cv::Mat InputImage;
 	cv::VideoCapture InputStream;
 
-	threshImage threshImg;
-
 	parseImageInput imgIO(inputPath);
 	imagepathArray = imgIO.getfiles(directory);
+
+	threshImage threshImg;
 
 	for (int i = 0; i < imagepathArray.size();) {
 
