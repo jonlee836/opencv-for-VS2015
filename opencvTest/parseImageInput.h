@@ -25,17 +25,6 @@ class parseImageInput {
 private:
 
 	vector <string> imgNames;
-
-	const string HueChannel = "1 Channel";
-	const string SatChannel = "2 Channel";
-	const string ValChannel = "3 Channel";
-
-	unsigned int totalFrames = 0;
-
-	int currFramePos = -1;
-	int Input_Width = -1;
-	int Input_Height = -1;
-
 	string filepath;
 
 public:

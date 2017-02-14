@@ -3,6 +3,11 @@
 using namespace cv;
 using namespace std;
 
+void threshImage::setvalues(int _minThresh, int _maxThresh) {
+	minThresh = _minThresh;
+	maxThresh = _maxThresh;
+}
+
 void threshImage::colorspace(Mat& a) {
 
 	vector<vector<Point> > contours;
@@ -30,8 +35,8 @@ void threshImage::carDetect(Mat& a) {
 
 	bg_model->apply(a, blob, 0);
 
-	GaussianBlur(blob, blob, Size(5, 5), 3.5, 3.5);
-	threshold(blob, blob, 10, 255, THRESH_BINARY);
+	//GaussianBlur(blob, blob, Size(5, 5), 3.5, 3.5);
+	threshold(blob, blob, minThresh, maxThresh, THRESH_BINARY);
 	
 	fgImg = Scalar::all(0);
 	a.copyTo(fgImg, blob);

@@ -20,6 +20,9 @@ class threshImage {
 
 private:
 
+	int minThresh = 10;
+	int maxThresh = 255;
+
 	Mat blob, cvtMat, bgImg, fgImg;
 	Mat chans[3];
 	Point pointArray[10];
@@ -30,6 +33,7 @@ public:
 
 	Mat getThreshold();
 
+	void setvalues(int _minThresh, int _maxThresh);
 	void colorspace(Mat& a);
 	void carDetect(Mat& a);
 	void findLines(Mat& a);

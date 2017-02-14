@@ -2,7 +2,7 @@
 
 using namespace cv;
 using namespace std;
-	
+
 void analyzePoints::findPoints(Mat& drawOn, Mat& threshold_output) {
 
 	vector<vector<Point> > contours;
@@ -52,7 +52,6 @@ Point analyzePoints::getShapeCenter(vector <Point>& contour) {
 
 	return objCenter;
 }
-
 
 Point analyzePoints::getMidpoint(Point a, Point b){  
   return Point((a.x+b.x)/2, (a.y+b.y)/2);

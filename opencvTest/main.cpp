@@ -21,6 +21,18 @@ using namespace cv;
 
 namespace fs = std::tr2::sys;
 
+int minThresh = 10;
+int maxThresh = 255;
+
+const string trackbar1 = "GUI TRACKBAR";
+
+void on_trackbar(int, void*) {}
+
+void gui() {
+	createTrackbar("minThresh", trackbar1, &minThresh, 255, on_trackbar);
+	createTrackbar("maxThresh", trackbar1, &maxThresh, 255, on_trackbar);
+}
+
 void runDetection(String name, Mat& InputImage, threshImage& threshImg, analyzePoints& srtPts) {
 	InputImage = imread(name);
 	
@@ -29,15 +41,20 @@ void runDetection(String name, Mat& InputImage, threshImage& threshImg, analyzeP
 	//imshow("input", InputImage);
 	
 	//threshImg.colorspace(InputImage);
+	threshImg.setvalues(minThresh, maxThresh);
 	threshImg.carDetect(InputImage);
 	threshImg.showChans();
+	
 	Mat binary = threshImg.getThreshold();
+	
 	imshow("binary", binary);
 	srtPts.findPoints(InputImage, binary);
 }
 
 int main(int argc, char** argv)
 {
+	namedWindow(trackbar1, 0);
+	gui();
 	
 	string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic/";
 	wchar_t *directory = L"C:/opencv/projects/car detection/M6_Motorway_Traffic/*.*";
