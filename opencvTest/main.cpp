@@ -23,6 +23,9 @@ namespace fs = std::tr2::sys;
 
 void runDetection(String name, Mat& InputImage, threshImage& threshImg, analyzePoints& srtPts) {
 	InputImage = imread(name);
+	
+	resize(InputImage, InputImage, Size(640, 480));
+
 	imshow("input", InputImage);
 	//threshImg.colorspace(InputImage);
 	threshImg.fgbgDetect(InputImage);

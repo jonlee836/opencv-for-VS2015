@@ -30,17 +30,17 @@ void threshImage::fgbgDetect(Mat& a) {
 
 	bg_model->apply(fgImg, blob, true);
 
-	//GaussianBlur(blob, blob, Size(11, 11), 3.5, 3.5);
-	threshold(blob, blob, 50, 255, THRESH_BINARY);
+	GaussianBlur(blob, blob, Size(5, 5), 3, 3);
+	threshold(blob, blob, 100, 255, THRESH_BINARY);
 	
-	fgImg = Scalar::all(0);
+	fgImg = a.clone();
 
 	// Why was it like this
 	//	a.copyTo(fgImg, blob);
 	// in my motion sensor code for the tk1?
 	// And why did it work at all?
 
-	a.copyTo(fgImg);
+	//a.copyTo(fgImg);
 
 	bg_model->getBackgroundImage(bgImg);
 }
