@@ -5,13 +5,12 @@ using namespace std;
 	
 void analyzePoints::findPoints(Mat& drawOn, Mat& threshold_output) {
 
-	GaussianBlur(threshold_output, threshold_output, Size(5, 5), 0);
-	threshold(threshold_output, threshold_output, 190, 255, THRESH_BINARY);
-	RemoveBySize(threshold_output, 300);
-	Mat dilateElement = getStructuringElement(MORPH_RECT, Size(25, 15));
-	//Mat erodeElement = getStructuringElement(MORPH_RECT, Size(5, 5));
+	RemoveBySize(threshold_output, 50);
 
-	dilate(threshold_output, threshold_output, dilateElement);
+	//Mat dilateElement = getStructuringElement(MORPH_RECT, Size(15, 15));
+	//Mat erodeElement = getStructuringElement(MORPH_RECT, Size(5, 5));
+	//dilate(threshold_output, threshold_output, dilateElement);
+
 	imshow("binary", threshold_output);
 
 	//erode(threshold_output, threshold_output, erodeElement);

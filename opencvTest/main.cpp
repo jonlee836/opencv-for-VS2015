@@ -24,8 +24,11 @@ namespace fs = std::tr2::sys;
 void runDetection(String name, Mat& InputImage, threshImage& threshImg, analyzePoints& srtPts) {
 	InputImage = imread(name);
 	imshow("input", InputImage);
-	threshImg.colorspace(InputImage);
+	//threshImg.colorspace(InputImage);
+	threshImg.fgbgDetect(InputImage);
+
 	Mat binary = threshImg.getThreshold();
+	imshow("binary", binary);
 	srtPts.findPoints(InputImage, binary);
 }
 
@@ -80,7 +83,8 @@ int main(int argc, char** argv)
 					i = 0;
 				}
 				else {
-					i++; break;
+					i++; 
+					break;
 				}
 			}
 			else if (char(k) == 'q') { return 0; }
@@ -92,7 +96,7 @@ int main(int argc, char** argv)
 
 				runDetection(name, InputImage, threshImg, srtPts);
 
-				//i++;
+				i++;
 				
 				if (i == imagepathArray.size()) {
 					i = 0;

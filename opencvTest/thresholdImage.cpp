@@ -8,33 +8,47 @@ void threshImage::colorspace(Mat& a) {
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
-	cvtColor(a, cvtMat, CV_BGR2HSV);
+	cvtColor(a, cvtMat, CV_BGR2GRAY);
+	
+	imshow("gray", cvtMat);
 	split(cvtMat, LuvChannels);
 
-	threshold_output = LuvChannels[2].clone();
+	blob = cvtMat.clone();
 
-	//imshow("L channel", LuvChannels[0]);
-	//imshow("U channel", LuvChannels[1]);
-	//imshow("V channel", LuvChannels[2]);
+	//threshold_output = LuvChannels[2].clone();
+
+	/*imshow("L channel", LuvChannels[0]);
+	imshow("U channel", LuvChannels[1]);
+	imshow("V channel", LuvChannels[2]);*/
 }
 
-void threshImage::RemoveBySize(Mat& a, int minArea) {
-	Mat temp = a.clone();
-	vector<vector <Point> > contours;
+void threshImage::fgbgDetect(Mat& a) {
 
-	findContours(temp, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-	for (int i = 0; i < contours.size(); i++) {
-		double area = contourArea(contours[i]);
-		if (area <= minArea) {
-			drawContours(a, contours, i, Scalar(0), CV_FILLED, 8);
-		}
+	if (fgImg.empty()) {
+		fgImg.create(a.size(), a.type());
 	}
+
+	bg_model->apply(fgImg, blob, true);
+
+	//GaussianBlur(blob, blob, Size(11, 11), 3.5, 3.5);
+	threshold(blob, blob, 50, 255, THRESH_BINARY);
+	
+	fgImg = Scalar::all(0);
+
+	// Why was it like this
+	//	a.copyTo(fgImg, blob);
+	// in my motion sensor code for the tk1?
+	// And why did it work at all?
+
+	a.copyTo(fgImg);
+
+	bg_model->getBackgroundImage(bgImg);
 }
 
 void threshImage::display_thresh() {
-	imshow("drawn on", threshold_output);
+	imshow("drawn on", blob);
 }
 
 Mat threshImage::getThreshold() {
-	return threshold_output;
+	return blob;
 }
