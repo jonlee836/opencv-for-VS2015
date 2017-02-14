@@ -3,10 +3,10 @@
 #ifndef THRESHOLDIMAGE_H
 #define THRESHOLDIMAGE_H
 
+#include "opencv2/core.hpp"
 #include <opencv2/core/utility.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
-#include <opencv2/core/utility.hpp>
 #include "opencv2/video/background_segm.hpp"
 #include "opencv2/videoio.hpp"
 
@@ -21,20 +21,20 @@ class threshImage {
 private:
 
 	Mat blob, cvtMat, bgImg, fgImg;
-	Mat LuvChannels[3];
+	Mat chans[3];
 	Point pointArray[10];
 
-	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorKNN().dynamicCast<BackgroundSubtractor>();
+	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorKNN(100, 400, true);
 
 public:
 
 	Mat getThreshold();
 
 	void colorspace(Mat& a);
-	void fgbgDetect(Mat& a);
+	void carDetect(Mat& a);
+	void findLines(Mat& a);
 
-	void display_thresh();
-
+	void showChans();
 };
 
 

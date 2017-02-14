@@ -11,7 +11,7 @@ void threshImage::colorspace(Mat& a) {
 	cvtColor(a, cvtMat, CV_BGR2GRAY);
 	
 	imshow("gray", cvtMat);
-	split(cvtMat, LuvChannels);
+	split(cvtMat, chans);
 
 	blob = cvtMat.clone();
 
@@ -22,31 +22,38 @@ void threshImage::colorspace(Mat& a) {
 	imshow("V channel", LuvChannels[2]);*/
 }
 
-void threshImage::fgbgDetect(Mat& a) {
+void threshImage::carDetect(Mat& a) {
 
 	if (fgImg.empty()) {
 		fgImg.create(a.size(), a.type());
 	}
 
-	bg_model->apply(fgImg, blob, true);
+	bg_model->apply(a, blob, 0);
 
-	GaussianBlur(blob, blob, Size(11, 11), 3, 3);
-	threshold(blob, blob, 150, 255, THRESH_BINARY);
+	GaussianBlur(blob, blob, Size(5, 5), 3.5, 3.5);
+	threshold(blob, blob, 10, 255, THRESH_BINARY);
 	
-	fgImg = a.clone();
-
-	// Why was it like this
-	//	a.copyTo(fgImg, blob);
-	// in my motion sensor code for the tk1?
-	// And why did it work at all?
-
-	//a.copyTo(fgImg);
+	fgImg = Scalar::all(0);
+	a.copyTo(fgImg, blob);
 
 	bg_model->getBackgroundImage(bgImg);
+	//findLines(a);
+
 }
 
-void threshImage::display_thresh() {
-	imshow("drawn on", blob);
+
+void threshImage::findLines(Mat& a) {
+	cvtColor(a, cvtMat, CV_BGR2HSV);
+	split(cvtMat, chans);
+}
+
+void threshImage::showChans() {
+
+	if (!chans[0].empty()) {
+		imshow("1", chans[0]);
+		imshow("2", chans[1]);
+		imshow("3", chans[2]);
+	}
 }
 
 Mat threshImage::getThreshold() {

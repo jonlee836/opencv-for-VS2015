@@ -26,10 +26,11 @@ void runDetection(String name, Mat& InputImage, threshImage& threshImg, analyzeP
 	
 	resize(InputImage, InputImage, Size(640, 480));
 
-	imshow("input", InputImage);
+	//imshow("input", InputImage);
+	
 	//threshImg.colorspace(InputImage);
-	threshImg.fgbgDetect(InputImage);
-
+	threshImg.carDetect(InputImage);
+	threshImg.showChans();
 	Mat binary = threshImg.getThreshold();
 	imshow("binary", binary);
 	srtPts.findPoints(InputImage, binary);
