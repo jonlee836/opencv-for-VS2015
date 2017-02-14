@@ -26,6 +26,10 @@ private:
 
 	vector <string> imgNames;
 
+	const string HueChannel = "1 Channel";
+	const string SatChannel = "2 Channel";
+	const string ValChannel = "3 Channel";
+
 	unsigned int totalFrames = 0;
 
 	int currFramePos = -1;

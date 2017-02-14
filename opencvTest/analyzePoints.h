@@ -4,6 +4,7 @@
 #define ANALYZEPOINTS_H
 
 #include <opencv2\core\core.hpp>
+#include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
 
 using namespace cv;
@@ -13,10 +14,14 @@ class analyzePoints {
 
 private:
 
-
+	int minArea = 300;
+	vector<vector<Point> > contours;
+	vector<Vec4i> hierarchy;
 
 public:
 
+	void findPoints(Mat& drawOn, Mat& a);
+	void RemoveBySize(Mat& a, int minArea);
 	Point getMidpoint(Point a, Point b);
 
 };

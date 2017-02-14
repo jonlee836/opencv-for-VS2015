@@ -4,17 +4,6 @@ parseImageInput::parseImageInput(string filepath_) {
 	filepath = filepath_;
 }
 
-//int parseImageInput::get_filenames()
-//{
-//	basic_string <char> filepath_bs(filepath);
-//
-//	totalFrames = std::count_if(fs::directory_iterator(filepath), fs::directory_iterator(), [](const fs::directory_entry& e){
-//		return e.path().extension() == ".jpg";
-//	});
-//
-//	return totalFrames;
-//}
-
 vector<string> parseImageInput::getfiles(wchar_t *folder)
 {
 	std::vector<std::string> vec;

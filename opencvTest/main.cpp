@@ -21,11 +21,22 @@ using namespace cv;
 
 namespace fs = std::tr2::sys;
 
+void runDetection(String name, Mat& InputImage, threshImage& threshImg, analyzePoints& srtPts) {
+	InputImage = imread(name);
+	imshow("input", InputImage);
+	threshImg.colorspace(InputImage);
+	Mat binary = threshImg.getThreshold();
+	srtPts.findPoints(InputImage, binary);
+}
+
 int main(int argc, char** argv)
 {
-
+	
 	string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic/";
 	wchar_t *directory = L"C:/opencv/projects/car detection/M6_Motorway_Traffic/*.*";
+	
+	//string inputPath = "C:/opencv/projects/plane detection/";
+	//wchar_t *directory = L"C:/opencv/projects/plane detection/*.*";
 
 	bool Allimg = true;
 	char chCheckForEscKey = 0;
@@ -35,6 +46,7 @@ int main(int argc, char** argv)
 	cv::Mat InputImage;
 	cv::VideoCapture InputStream;
 
+	analyzePoints srtPts;
 	parseImageInput imgIO(inputPath);
 	imagepathArray = imgIO.getfiles(directory);
 
@@ -52,23 +64,25 @@ int main(int argc, char** argv)
 
 				string name = inputPath + imagepathArray[i];
 				cout << name << endl;
-
-				InputImage = imread(name);
-				threshImg.colorspace(InputImage);
+				runDetection(name, InputImage, threshImg, srtPts);
 
 				//i++;
 			}
 			else if (char(k) == '2') { Allimg = true; }
 			else if (char(k) == 'b' && i > 1) {
 				i--;
-				name = inputPath + imagepathArray[i];
-				InputImage = imread(name);
-				
-				threshImg.colorspace(InputImage);
+				runDetection(name, InputImage, threshImg, srtPts);
 
 				break;
 			}
-			else if (char(k) == 'n' && i < imagepathArray.size()) {i++; break; }
+			else if (char(k) == 'n' && i < imagepathArray.size()) {
+				if (i == imagepathArray.size() - 1) {
+					i = 0;
+				}
+				else {
+					i++; break;
+				}
+			}
 			else if (char(k) == 'q') { return 0; }
 			else if (Allimg == true) {
 
@@ -76,11 +90,13 @@ int main(int argc, char** argv)
 
 				cout << name << endl;
 
-				InputImage = imread(name);
+				runDetection(name, InputImage, threshImg, srtPts);
 
-				threshImg.colorspace(InputImage);
-
-				i++;
+				//i++;
+				
+				if (i == imagepathArray.size()) {
+					i = 0;
+				}
 
 				break;
 			}
