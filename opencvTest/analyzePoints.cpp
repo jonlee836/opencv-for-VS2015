@@ -5,16 +5,14 @@ using namespace std;
 	
 void analyzePoints::findPoints(Mat& drawOn, Mat& threshold_output) {
 
-	RemoveBySize(threshold_output, 50);
+	//RemoveBySize(threshold_output, 50);
 
 	//Mat dilateElement = getStructuringElement(MORPH_RECT, Size(15, 15));
-	Mat erodeElement = getStructuringElement(MORPH_RECT, Size(5, 5));
+	Mat erodeElement = getStructuringElement(MORPH_RECT, Size(10, 10));
 	erode(threshold_output, threshold_output, erodeElement);
-
 	//dilate(threshold_output, threshold_output, dilateElement);
 
 	//imshow("binary", threshold_output);
-
 
 	findContours(threshold_output, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 	vector<vector<Point> >hull(contours.size());
@@ -27,8 +25,8 @@ void analyzePoints::findPoints(Mat& drawOn, Mat& threshold_output) {
 	{
 		approxPolyDP(Mat(contours[i]), contours[i], 0, true);
 
-		//drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
-		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 4, 8, vector<Vec4i>(), 0, Point());
+		drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
+		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 3, 8, vector<Vec4i>(), 0, Point());
 	}
 
 	// Show in a window

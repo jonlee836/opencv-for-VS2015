@@ -30,8 +30,8 @@ void threshImage::fgbgDetect(Mat& a) {
 
 	bg_model->apply(fgImg, blob, true);
 
-	GaussianBlur(blob, blob, Size(5, 5), 3, 3);
-	threshold(blob, blob, 100, 255, THRESH_BINARY);
+	GaussianBlur(blob, blob, Size(11, 11), 3, 3);
+	threshold(blob, blob, 150, 255, THRESH_BINARY);
 	
 	fgImg = a.clone();
 
