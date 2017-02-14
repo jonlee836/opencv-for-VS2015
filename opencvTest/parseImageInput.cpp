@@ -30,7 +30,10 @@ vector<string> parseImageInput::getfiles(wchar_t *folder)
 			wstring tmp = ffd.cFileName;
 			string newstr(tmp.begin(), tmp.end());
 
-			// for whatever reason there 1 dot followed by another line with 2 dots. this makes the counter off by 2.
+			// This if statement is to parse any extra characters in the file name.
+			// On windows 7 sp1 using vs2015 for instance there is 1 dot followed by another line with 2 dots,
+			// making the total number of images in a folder n+2
+
 			if (newstr.length() > 5) {
 				vec.push_back(newstr);
 			}
