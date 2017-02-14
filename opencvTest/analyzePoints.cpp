@@ -62,6 +62,7 @@ void analyzePoints::RemoveBySize(Mat& a, int minArea) {
 	vector<vector <Point> > contours;
 
 	findContours(temp, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+
 	for (int i = 0; i < contours.size(); i++) {
 		double area = contourArea(contours[i]);
 		if (area <= minArea) {

@@ -56,6 +56,8 @@ int main(int argc, char** argv)
 	namedWindow(trackbar1, 0);
 	gui();
 	
+	string cmdInput;
+
 	string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic/";
 	wchar_t *directory = L"C:/opencv/projects/car detection/M6_Motorway_Traffic/*.*";
 	
@@ -81,6 +83,7 @@ int main(int argc, char** argv)
 		string name = inputPath + imagepathArray[i];
 
 		while (true) {
+			
 			int k = waitKey(1);
 
 			if (char(k) == '1') { // re-process current frame
