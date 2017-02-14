@@ -15,8 +15,6 @@ class analyzePoints {
 private:
 
 	int minArea = 300;
-	vector<vector<Point> > contours;
-	vector<Vec4i> hierarchy;
 
 public:
 

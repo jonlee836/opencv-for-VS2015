@@ -96,7 +96,7 @@ int main(int argc, char** argv)
 
 				string name = inputPath + imagepathArray[i];
 
-				cout << name << endl;
+				//cout << name << endl;
 
 				runDetection(name, InputImage, threshImg, srtPts);
 
