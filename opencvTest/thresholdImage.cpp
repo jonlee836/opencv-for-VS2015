@@ -1,4 +1,5 @@
 #include "thresholdImage.h"
+#include "displayMats.h"
 
 using namespace cv;
 using namespace std;
@@ -15,16 +16,8 @@ void threshImage::colorspace(Mat& a) {
 
 	cvtColor(a, cvtMat, CV_BGR2GRAY);
 	
-	imshow("gray", cvtMat);
 	split(cvtMat, chans);
-
 	blob = cvtMat.clone();
-
-	//threshold_output = LuvChannels[2].clone();
-
-	/*imshow("L channel", LuvChannels[0]);
-	imshow("U channel", LuvChannels[1]);
-	imshow("V channel", LuvChannels[2]);*/
 }
 
 void threshImage::carDetect(Mat& a) {
@@ -52,7 +45,6 @@ void threshImage::findLines(Mat& a) {
 }
 
 void threshImage::showChans() {
-
 	if (!chans[0].empty()) {
 		imshow("1", chans[0]);
 		imshow("2", chans[1]);

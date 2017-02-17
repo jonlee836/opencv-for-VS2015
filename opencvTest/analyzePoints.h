@@ -19,10 +19,6 @@ private:
 public:
 
 	void findPoints(Mat& drawOn, Mat& a);
-	void RemoveBySize(Mat& a, int minArea);
-
-	Point getMidpoint(Point a, Point b);
-	Point getShapeCenter(vector <Point>& contour);
 };
 
 

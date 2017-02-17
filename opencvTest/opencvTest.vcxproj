@@ -20,15 +20,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="analyzePoints.cpp" />
+    <ClCompile Include="colorspaceCvt.cpp" />
+    <ClCompile Include="displayMats.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="parseImageInput.cpp" />
     <ClCompile Include="parseVideoInput.cpp" />
+    <ClCompile Include="pointMath.cpp" />
     <ClCompile Include="thresholdImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="analyzePoints.h" />
+    <ClInclude Include="displayMats.h" />
+    <ClInclude Include="colorspaceCvt.h" />
     <ClInclude Include="parseImageInput.h" />
     <ClInclude Include="parseVideoInput.h" />
+    <ClInclude Include="pointMath.h" />
     <ClInclude Include="thresholdImage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

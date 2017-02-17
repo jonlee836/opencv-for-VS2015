@@ -30,6 +30,15 @@
     <ClCompile Include="parseVideoInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pointMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="displayMats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="colorspaceCvt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="analyzePoints.h">
@@ -43,6 +52,15 @@
     </ClInclude>
     <ClInclude Include="parseImageInput.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pointMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="displayMats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="colorspaceCvt.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

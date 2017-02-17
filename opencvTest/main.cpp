@@ -16,6 +16,9 @@
 #include "analyzePoints.h"
 #include "thresholdImage.h"
 
+#include "colorspaceCvt.h"
+#include "displayMats.h"
+
 using namespace std;
 using namespace cv;
 
@@ -33,22 +36,31 @@ void gui() {
 	createTrackbar("maxThresh", trackbar1, &maxThresh, 255, on_trackbar);
 }
 
-void runDetection(String name, Mat& InputImage, threshImage& threshImg, analyzePoints& srtPts) {
+void runDetection(string name, Mat& InputImage, threshImage& threshImg, analyzePoints& srtPts) {
 	InputImage = imread(name);
 	
 	resize(InputImage, InputImage, Size(640, 480));
 
+	string foo = "test";
+	cvt2HSV(InputImage);
+	//displayMat(foo, InputImage);
+
+	vector<Mat> mv;
+	split(InputImage, mv);
+
+	displayMatChans(foo, mv);
+
 	//imshow("input", InputImage);
 	
 	//threshImg.colorspace(InputImage);
-	threshImg.setvalues(minThresh, maxThresh);
-	threshImg.carDetect(InputImage);
-	threshImg.showChans();
-	
-	Mat binary = threshImg.getThreshold();
-	
-	imshow("binary", binary);
-	srtPts.findPoints(InputImage, binary);
+	//threshImg.setvalues(minThresh, maxThresh);
+	//threshImg.carDetect(InputImage);
+	//threshImg.showChans();
+	//
+	//Mat binary = threshImg.getThreshold();
+	//
+	//imshow("binary", binary);
+	//srtPts.findPoints(InputImage, binary);
 }
 
 int main(int argc, char** argv)
