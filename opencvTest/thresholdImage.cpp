@@ -46,7 +46,6 @@ void threshImage::carDetect(Mat& a) {
 
 }
 
-
 void threshImage::findLines(Mat& a) {
 	cvtColor(a, cvtMat, CV_BGR2HSV);
 	split(cvtMat, chans);
