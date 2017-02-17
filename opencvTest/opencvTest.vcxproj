@@ -26,7 +26,8 @@
     <ClCompile Include="parseImageInput.cpp" />
     <ClCompile Include="parseVideoInput.cpp" />
     <ClCompile Include="pointMath.cpp" />
-    <ClCompile Include="thresholdImage.cpp" />
+    <ClCompile Include="CarDetection.cpp" />
+    <ClCompile Include="shapeMats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="analyzePoints.h" />
@@ -35,7 +36,8 @@
     <ClInclude Include="parseImageInput.h" />
     <ClInclude Include="parseVideoInput.h" />
     <ClInclude Include="pointMath.h" />
-    <ClInclude Include="thresholdImage.h" />
+    <ClInclude Include="CarDetection.h" />
+    <ClInclude Include="shapeMats.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4FED714-E1BA-4D46-B9B1-C3978116C46F}</ProjectGuid>

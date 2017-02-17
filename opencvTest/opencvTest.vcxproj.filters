@@ -13,15 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\functions">
+      <UniqueIdentifier>{3efbd07c-8e44-4752-8dd8-d0514b67a945}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="analyzePoints.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="thresholdImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="parseImageInput.cpp">
@@ -33,34 +30,46 @@
     <ClCompile Include="pointMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="displayMats.cpp">
+    <ClCompile Include="CarDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="analyzePoints.cpp">
+      <Filter>Source Files\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="shapeMats.cpp">
+      <Filter>Source Files\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="displayMats.cpp">
+      <Filter>Source Files\functions</Filter>
+    </ClCompile>
     <ClCompile Include="colorspaceCvt.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\functions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="analyzePoints.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="thresholdImage.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="parseVideoInput.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="parseImageInput.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="pointMath.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CarDetection.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="displayMats.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="analyzePoints.h">
+      <Filter>Source Files\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="shapeMats.h">
+      <Filter>Source Files\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="pointMath.h">
+      <Filter>Source Files\functions</Filter>
     </ClInclude>
     <ClInclude Include="colorspaceCvt.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="displayMats.h">
+      <Filter>Source Files\functions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

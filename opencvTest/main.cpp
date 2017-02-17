@@ -14,10 +14,10 @@
 #include "parseImageInput.h"
 
 #include "analyzePoints.h"
-#include "thresholdImage.h"
+#include "CarDetection.h"
 
-#include "colorspaceCvt.h"
-#include "displayMats.h"
+//#include "colorspaceCvt.h"
+//#include "displayMats.h"
 
 using namespace std;
 using namespace cv;
@@ -34,33 +34,6 @@ void on_trackbar(int, void*) {}
 void gui() {
 	createTrackbar("minThresh", trackbar1, &minThresh, 255, on_trackbar);
 	createTrackbar("maxThresh", trackbar1, &maxThresh, 255, on_trackbar);
-}
-
-void runDetection(string name, Mat& InputImage, threshImage& threshImg, analyzePoints& srtPts) {
-	InputImage = imread(name);
-	
-	resize(InputImage, InputImage, Size(640, 480));
-
-	string foo = "test";
-	cvt2HSV(InputImage);
-	//displayMat(foo, InputImage);
-
-	vector<Mat> mv;
-	split(InputImage, mv);
-
-	displayMatChans(foo, mv);
-
-	//imshow("input", InputImage);
-	
-	//threshImg.colorspace(InputImage);
-	//threshImg.setvalues(minThresh, maxThresh);
-	//threshImg.carDetect(InputImage);
-	//threshImg.showChans();
-	//
-	//Mat binary = threshImg.getThreshold();
-	//
-	//imshow("binary", binary);
-	//srtPts.findPoints(InputImage, binary);
 }
 
 int main(int argc, char** argv)
@@ -84,11 +57,10 @@ int main(int argc, char** argv)
 	cv::Mat InputImage;
 	cv::VideoCapture InputStream;
 
-	analyzePoints srtPts;
 	parseImageInput imgIO(inputPath);
 	imagepathArray = imgIO.getfiles(directory);
 
-	threshImage threshImg;
+	CarDetection findcar;
 
 	for (int i = 0; i < imagepathArray.size();) {
 
@@ -102,15 +74,14 @@ int main(int argc, char** argv)
 				Allimg = false;
 
 				string name = inputPath + imagepathArray[i];
-				cout << name << endl;
-				runDetection(name, InputImage, threshImg, srtPts);
+				findcar.carDetect(name, minThresh, maxThresh);
 
 				//i++;
 			}
 			else if (char(k) == '2') { Allimg = true; }
 			else if (char(k) == 'b' && i > 1) {
 				i--;
-				runDetection(name, InputImage, threshImg, srtPts);
+				findcar.carDetect(name, minThresh, maxThresh);
 
 				break;
 			}
@@ -127,10 +98,7 @@ int main(int argc, char** argv)
 			else if (Allimg == true) {
 
 				string name = inputPath + imagepathArray[i];
-
-				//cout << name << endl;
-
-				runDetection(name, InputImage, threshImg, srtPts);
+				findcar.carDetect(name, minThresh, maxThresh);
 
 				i++;
 				
