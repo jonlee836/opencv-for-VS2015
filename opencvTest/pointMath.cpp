@@ -1,5 +1,15 @@
 #include "pointMath.h"
 
+bool checkEdgeDist(Point& a, int dist2Edge, int imgWidth, int imgHeight) {
+	if (a.x <= dist2Edge || 
+		a.x >= imgWidth - dist2Edge ||
+		a.y <= dist2Edge ||
+		a.y >= imgHeight - dist2Edge)
+	{
+		return true;
+	}
+}
+
 void RemoveBySize(Mat& a, int minArea) {
 	Mat temp = a.clone();
 	vector<vector <Point> > contours;

@@ -10,6 +10,8 @@
 using namespace cv;
 using namespace std;
 
+bool checkEdgeDist(Point& a, int dist2Edge, int imgWidth, int imgHeight);
+
 void RemoveBySize(Mat& a, int minArea);
 
 Point getMidpoint(Point a, Point b);
