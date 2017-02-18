@@ -6,8 +6,6 @@ void analyzePoints::findPoints(Mat& drawOn, Mat& threshold_output) {
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
-	RemoveBySize(threshold_output, 200);
-
 	//Mat dilateElement = getStructuringElement(MORPH_RECT, Size(5, 5));
 	//Mat erodeElement = getStructuringElement(MORPH_RECT, Size(25, 25));
 	//erode(threshold_output, threshold_output, erodeElement);

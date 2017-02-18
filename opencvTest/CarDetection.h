@@ -16,6 +16,7 @@
 #include "pointMath.h"
 #include "colorspaceCvt.h"
 #include "displayMats.h"
+#include "shapeMats.h"
 
 using namespace cv;
 using namespace std;

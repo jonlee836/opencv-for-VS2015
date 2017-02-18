@@ -13,7 +13,6 @@
 #include "parseVideoInput.h"
 #include "parseImageInput.h"
 
-#include "analyzePoints.h"
 #include "CarDetection.h"
 
 #include "colorspaceCvt.h"
@@ -30,12 +29,9 @@ int maxThresh = 255;
 const string trackbar1 = "GUI TRACKBAR";
 String nameb1 = "button1";
 
-void callbackButton(int, void*) {}
 void on_trackbar(int, void*) {}
 
 void gui() {
-
-	createButton(nameb1, callbackButton, &nameb1, QT_CHECKBOX, 1);
 
 	createTrackbar("minThresh", trackbar1, &minThresh, 255, on_trackbar);
 	createTrackbar("maxThresh", trackbar1, &maxThresh, 255, on_trackbar);

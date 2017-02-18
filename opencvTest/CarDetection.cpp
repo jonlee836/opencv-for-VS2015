@@ -11,7 +11,8 @@ void CarDetection::carDetect(string imgName,int _minThresh, int _maxThresh){
 	vector<Vec4i> hierarchy;
 
 	resize(InputImage, InputImage, Size(640, 480));
-	
+	equalizeHist(InputImage, InputImage);
+
 	drawOn = InputImage.clone();
 
 	if (fgImg.empty()) {
