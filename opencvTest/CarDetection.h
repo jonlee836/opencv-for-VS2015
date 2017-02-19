@@ -43,6 +43,9 @@ private:
 	int linesMinLength = 40;
 	int linesMaxGap = 200;
 
+	int cannyThresh1 = 50;
+	int cannyThresh2 = 150;
+
 	vector<vector<Point> > contours;
 	
 	vector<Point> prevPoints, currPoints;
@@ -76,6 +79,9 @@ public:
 		createTrackbar("MinLength", TRACKBAR_CARDETECT, &linesMinLength, 300);
 
 		createTrackbar("MaxGap", TRACKBAR_CARDETECT, &linesMaxGap, 300);
+
+		createTrackbar("canny thresh1", TRACKBAR_CARDETECT, &cannyThresh1, 300);
+		createTrackbar("canny thresh2", TRACKBAR_CARDETECT, &cannyThresh2, 300);
 	}
 
 	/*void MyCallbackForBrightness(int iValueForBrightness, void *userData) {

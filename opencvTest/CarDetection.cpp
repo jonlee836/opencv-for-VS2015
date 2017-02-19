@@ -89,7 +89,7 @@ void CarDetection::findSolidLines(Mat& a) {
 	arg 4.) theta : Angle resolution of the accumulator in radians.
 	arg 5.) threshold : Only those lines with X number of votes
 	*/
-	Canny(a, a, 50, 150);
+	Canny(a, a, cannyThresh1, cannyThresh2);
 
 	//HoughLines(a, lines, 1, CV_PI / 180, 150);
 	if (linesRho <= 0) { linesRho = 1; }
