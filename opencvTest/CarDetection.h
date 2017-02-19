@@ -27,10 +27,17 @@ private:
 
 	string WINDOW_CARDETECT = "car detect";
 
+	int erodeAmount = 5;
+	int dilateAmount = 15;
+
 	int minThresh = 10;
 	int maxThresh = 255;
 
 	vector<vector<Point> > contours;
+	
+	vector<Point> prevPoints;
+	vector<Point> currPoints;
+	
 	vector<Vec4i> hierarchy;
 
 	Mat InputImage, drawOn, lineMat, blob, bgImg, fgImg;
@@ -44,7 +51,8 @@ public:
 	Mat getThreshold();
 
 	void carDetect(string imgName, int _minThresh, int _maxThresh);
-	void findLines(Mat& a);
+	void findLines(Mat&a);
+	void trackPoints(vector<Point>& foundPoints);
 };
 
 

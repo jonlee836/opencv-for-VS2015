@@ -87,13 +87,8 @@ int main(int argc, char** argv)
 				break;
 			}
 			else if (char(k) == 'n' && i < imagepathArray.size()) {
-				if (i == imagepathArray.size() - 1) {
-					i = 0;
-				}
-				else {
-					i++; 
-					break;
-				}
+				if (i == imagepathArray.size() - 1) { i = 0; }
+				else {i++; break;}
 			}
 			else if (char(k) == 'q') { return 0; }
 			else if (Allimg == true) {
@@ -103,9 +98,7 @@ int main(int argc, char** argv)
 
 				i++;
 				
-				if (i == imagepathArray.size()) {
-					i = 0;
-				}
+				if (i == imagepathArray.size()) { i = 0; }
 
 				break;
 			}

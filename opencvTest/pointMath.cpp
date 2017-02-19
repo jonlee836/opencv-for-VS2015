@@ -20,3 +20,7 @@ Point getShapeCenter(vector <Point>& contour) {
 
 	return objCenter;
 }
+
+double getPointdist(Point& a, Point& b) {
+	return norm(a - b);
+}

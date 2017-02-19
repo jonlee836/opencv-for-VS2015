@@ -11,5 +11,6 @@ using namespace cv;
 using namespace std;
 
 void RemoveBySize(Mat& a, int minArea);
+void ErodeDilate(Mat& a, int ea, int da);
 
 #endif // SHAPEMATS_H

@@ -15,4 +15,6 @@ bool checkEdgeDist(Point& a, int dist2Edge, int imgWidth, int imgHeight);
 Point getMidpoint(Point a, Point b);
 Point getShapeCenter(vector <Point>& contour);
 
+double getPointdist(Point& a, Point& b);
+
 #endif // POINTMATH_H

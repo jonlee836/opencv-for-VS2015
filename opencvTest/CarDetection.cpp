@@ -11,7 +11,7 @@ void CarDetection::carDetect(string imgName,int _minThresh, int _maxThresh){
 	vector<Vec4i> hierarchy;
 
 	resize(InputImage, InputImage, Size(640, 480));
-	equalizeHist(InputImage, InputImage);
+	//equalizeHist(InputImage, InputImage);
 
 	drawOn = InputImage.clone();
 
@@ -31,11 +31,7 @@ void CarDetection::carDetect(string imgName,int _minThresh, int _maxThresh){
 
 	RemoveBySize(blob, 200);
 
-	Mat dilateElement = getStructuringElement(MORPH_RECT, Size(15, 15));
-	Mat erodeElement = getStructuringElement(MORPH_RECT, Size(5, 5));
-
-	erode(blob, blob, erodeElement);
-	dilate(blob, blob, dilateElement);
+	ErodeDilate(blob, erodeAmount, dilateAmount);
 
 	findContours(blob, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
@@ -56,6 +52,10 @@ void CarDetection::carDetect(string imgName,int _minThresh, int _maxThresh){
 	}
 
 	displayMat(WINDOW_CARDETECT, drawOn);
+
+}
+
+void CarDetection::trackPoints(vector<Point>& a) {
 
 }
 

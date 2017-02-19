@@ -13,3 +13,13 @@ void RemoveBySize(Mat& a, int minArea) {
 		}
 	}
 }
+
+void ErodeDilate(Mat& a, int ea, int da) {
+
+	Mat erodeElement = getStructuringElement(MORPH_RECT, Size(ea, ea));
+	Mat dilateElement = getStructuringElement(MORPH_RECT, Size(da, da));
+
+	erode(a, a, erodeElement);
+	dilate(a, a, dilateElement);
+
+}
