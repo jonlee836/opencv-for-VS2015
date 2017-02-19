@@ -16,6 +16,9 @@ void RemoveBySize(Mat& a, int minArea) {
 
 void ErodeDilate(Mat& a, int ea, int da) {
 
+	if (ea <= 0) { ea = 1; }
+	if (da <= 0) { da = 1; }
+
 	Mat erodeElement = getStructuringElement(MORPH_RECT, Size(ea, ea));
 	Mat dilateElement = getStructuringElement(MORPH_RECT, Size(da, da));
 

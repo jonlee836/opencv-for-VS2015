@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="analyzePoints.cpp" />
-    <ClCompile Include="colorspaceCvt.cpp" />
+    <ClCompile Include="threshImg.cpp" />
     <ClCompile Include="displayMats.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="parseImageInput.cpp" />
@@ -32,7 +32,7 @@
   <ItemGroup>
     <ClInclude Include="analyzePoints.h" />
     <ClInclude Include="displayMats.h" />
-    <ClInclude Include="colorspaceCvt.h" />
+    <ClInclude Include="threshImg.h" />
     <ClInclude Include="parseImageInput.h" />
     <ClInclude Include="parseVideoInput.h" />
     <ClInclude Include="pointMath.h" />

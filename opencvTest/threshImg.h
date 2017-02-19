@@ -22,8 +22,11 @@ void cvt2LUV(Mat& a);
 void cvt2LAB(Mat& a);
 void cvt2GRAY(Mat& a);
 
-void cvt2EqaulizeImg(Mat& a);
+void cvt2EqualizeImg(Mat& a);
 
 void cvt2EqualizeIntensity(Mat& inputImage);
+void adjustContrast(Mat& a, int contrastAdj, int brightAdj);
+
+void DogSaliency(Mat& a);
 
 #endif // COLORSPACECVT_H

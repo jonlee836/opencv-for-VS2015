@@ -15,33 +15,15 @@
 
 #include "CarDetection.h"
 
-#include "colorspaceCvt.h"
+#include "threshImg.h"
 #include "displayMats.h"
 
 using namespace std;
 using namespace cv;
 
-namespace fs = std::tr2::sys;
-
-int minThresh = 10;
-int maxThresh = 255;
-
-const string trackbar1 = "GUI TRACKBAR";
-String nameb1 = "button1";
-
-void on_trackbar(int, void*) {}
-
-void gui() {
-
-	createTrackbar("minThresh", trackbar1, &minThresh, 255, on_trackbar);
-	createTrackbar("maxThresh", trackbar1, &maxThresh, 255, on_trackbar);
-}
-
 int main(int argc, char** argv)
 {
-	namedWindow(trackbar1, 0);
-	gui();
-	
+
 	string cmdInput;
 
 	string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic/";
@@ -56,7 +38,6 @@ int main(int argc, char** argv)
 	vector<string> imagepathArray;
 
 	cv::Mat InputImage;
-	cv::VideoCapture InputStream;
 
 	parseImageInput imgIO(inputPath);
 	imagepathArray = imgIO.getfiles(directory);
@@ -73,17 +54,12 @@ int main(int argc, char** argv)
 
 			if (char(k) == '1') { // re-process current frame
 				Allimg = false;
-
-				string name = inputPath + imagepathArray[i];
-				findcar.carDetect(name, minThresh, maxThresh);
-
-				//i++;
+				findcar.carDetect(name);
 			}
 			else if (char(k) == '2') { Allimg = true; }
 			else if (char(k) == 'b' && i > 1) {
 				i--;
-				findcar.carDetect(name, minThresh, maxThresh);
-
+				findcar.carDetect(name);
 				break;
 			}
 			else if (char(k) == 'n' && i < imagepathArray.size()) {
@@ -93,13 +69,9 @@ int main(int argc, char** argv)
 			else if (char(k) == 'q') { return 0; }
 			else if (Allimg == true) {
 
-				string name = inputPath + imagepathArray[i];
-				findcar.carDetect(name, minThresh, maxThresh);
-
+				findcar.carDetect(name);
 				i++;
-				
 				if (i == imagepathArray.size()) { i = 0; }
-
 				break;
 			}
 		}

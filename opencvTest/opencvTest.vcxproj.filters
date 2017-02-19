@@ -42,7 +42,7 @@
     <ClCompile Include="displayMats.cpp">
       <Filter>Source Files\functions</Filter>
     </ClCompile>
-    <ClCompile Include="colorspaceCvt.cpp">
+    <ClCompile Include="threshImg.cpp">
       <Filter>Source Files\functions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,10 +65,10 @@
     <ClInclude Include="pointMath.h">
       <Filter>Source Files\functions</Filter>
     </ClInclude>
-    <ClInclude Include="colorspaceCvt.h">
+    <ClInclude Include="displayMats.h">
       <Filter>Source Files\functions</Filter>
     </ClInclude>
-    <ClInclude Include="displayMats.h">
+    <ClInclude Include="threshImg.h">
       <Filter>Source Files\functions</Filter>
     </ClInclude>
   </ItemGroup>
