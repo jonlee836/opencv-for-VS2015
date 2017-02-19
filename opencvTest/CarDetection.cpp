@@ -12,12 +12,13 @@ void CarDetection::carDetect(string imgName){
 	imshow("input", img);
 	drawOn = img.clone();
 
-	//medianBlur(img, img, 5);
-	imshow("after  blur", img);
 
 	cvt2GRAY(img);
 	adjustContrast(img, iValueForContrast, iValueForBrightness);
-	GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
+	medianBlur(img, img, 11);
+	imshow("after  blur", img);
+
+	//GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
 	
 	if (fgImg.empty()) {
 		fgImg.create(img.size(), img.type());
@@ -55,6 +56,7 @@ void CarDetection::carDetect(string imgName){
 	for (int i = 0; i < contours.size(); i++) {
 		
 		approxPolyDP(Mat(contours[i]), contours[i], 0, true);
+
 		drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
 		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 2, 8, vector<Vec4i>(), 0, Point());
 		Point center = getShapeCenter(contours[i]);
@@ -70,6 +72,8 @@ void CarDetection::trackPoints(vector<Point>& a) {
 }
 
 void CarDetection::findSolidLines(Mat& a) {
+	
+	// vector<Vec4f> lines;
 	vector<Vec4f> lines;
 
 	/*
@@ -86,8 +90,10 @@ void CarDetection::findSolidLines(Mat& a) {
 	arg 5.) threshold : Only those lines with X number of votes
 	*/
 	Canny(a, a, 50, 150);
+
 	//HoughLines(a, lines, 1, CV_PI / 180, 150);
-	HoughLinesP(a, lines, 5, CV_PI / 180, 80, 30, 50);
+	if (linesRho <= 0) { linesRho = 1; }
+	HoughLinesP(a, lines, linesRho, CV_PI / linesTheta, linesThresh, linesMinLength, linesMaxGap);
 
 	for (size_t i = 0; i < lines.size(); i++) {
 
@@ -104,7 +110,7 @@ void CarDetection::findSolidLines(Mat& a) {
 		pt2.x = cvRound(x0 - 1000 * (-b));
 		pt2.y = cvRound(y0 - 1000 * (a));
 
-		line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 255, 255), 3, 8);
+		line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 150, 0), 1, 8);
 		//line(drawOn, pt1, pt2, Scalar(255,255,255), 1, CV_AA);
 	}
 }

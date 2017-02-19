@@ -37,6 +37,12 @@ private:
 	int erodeAmount = 5;
 	int dilateAmount = 15;
 
+	int linesRho = 15;
+	int linesTheta = 180;
+	int linesThresh = 150;
+	int linesMinLength = 40;
+	int linesMaxGap = 10;
+
 	vector<vector<Point> > contours;
 	
 	vector<Point> prevPoints, currPoints;
@@ -52,7 +58,7 @@ public:
 	
 	CarDetection::CarDetection() {
 
-		namedWindow(TRACKBAR_CARDETECT);
+		namedWindow(TRACKBAR_CARDETECT, WINDOW_NORMAL);
 
 		createTrackbar("minThresh", TRACKBAR_CARDETECT, &minThresh, 255);
 		createTrackbar("maxThresh", TRACKBAR_CARDETECT, &maxThresh, 255);
@@ -63,6 +69,13 @@ public:
 		createTrackbar("erode", TRACKBAR_CARDETECT, &erodeAmount, 20);
 		createTrackbar("dilate", TRACKBAR_CARDETECT, &dilateAmount, 20);
 
+		createTrackbar("Rho", TRACKBAR_CARDETECT, &linesRho, 200);
+		createTrackbar("Theta", TRACKBAR_CARDETECT, &linesTheta, 200);
+
+		createTrackbar("Thresh", TRACKBAR_CARDETECT, &linesThresh, 300);
+		createTrackbar("MinLength", TRACKBAR_CARDETECT, &linesMinLength, 300);
+
+		createTrackbar("MaxGap", TRACKBAR_CARDETECT, &linesMaxGap, 300);
 	}
 
 	/*void MyCallbackForBrightness(int iValueForBrightness, void *userData) {
