@@ -22,4 +22,8 @@ void cvt2LUV(Mat& a);
 void cvt2LAB(Mat& a);
 void cvt2GRAY(Mat& a);
 
+void cvt2EqaulizeImg(Mat& a);
+
+Mat cvt2EqualizeIntensity(const Mat& inputImage);
+
 #endif // COLORSPACECVT_H

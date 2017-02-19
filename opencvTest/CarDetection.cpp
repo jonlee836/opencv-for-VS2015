@@ -11,7 +11,12 @@ void CarDetection::carDetect(string imgName,int _minThresh, int _maxThresh){
 	vector<Vec4i> hierarchy;
 
 	resize(InputImage, InputImage, Size(640, 480));
-	//equalizeHist(InputImage, InputImage);
+
+	imshow("input image before", InputImage);
+
+	cvt2EqualizeIntensity(InputImage);
+
+	//imshow("input equalized", InputImage);
 
 	drawOn = InputImage.clone();
 
@@ -56,7 +61,7 @@ void CarDetection::carDetect(string imgName,int _minThresh, int _maxThresh){
 }
 
 void CarDetection::trackPoints(vector<Point>& a) {
-
+	
 }
 
 void CarDetection::findLines(Mat& a) {
