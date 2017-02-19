@@ -25,6 +25,8 @@ class CarDetection {
 
 private:
 
+	int frame = 0;
+
 	string WINDOW_CARDETECT = "car detect";
 	const string TRACKBAR_CARDETECT = "car detect trackbar";
 	
@@ -39,7 +41,7 @@ private:
 
 	int linesRho = 1;
 	int linesTheta = 180;
-	int linesThresh = 160;
+	int linesThresh = 125;
 	int linesMinLength = 40;
 	int linesMaxGap = 200;
 

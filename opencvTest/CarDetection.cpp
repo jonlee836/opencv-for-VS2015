@@ -73,8 +73,8 @@ void CarDetection::trackPoints(vector<Point>& a) {
 
 void CarDetection::findSolidLines(Mat& a) {
 	
-	// vector<Vec4f> lines;
-	vector<Vec4f> lines;
+	//vector<Vec4f> lines;
+	vector<Vec2f> lines;
 
 	/*
 	HoughLines
@@ -89,13 +89,14 @@ void CarDetection::findSolidLines(Mat& a) {
 	arg 4.) theta : Angle resolution of the accumulator in radians.
 	arg 5.) threshold : Only those lines with X number of votes
 	*/
+
 	Canny(a, a, cannyThresh1, cannyThresh2);
-
-	//HoughLines(a, lines, 1, CV_PI / 180, 150);
+	
 	if (linesRho <= 0) { linesRho = 1; }
-	HoughLinesP(a, lines, linesRho, CV_PI / linesTheta, linesThresh, linesMinLength, linesMaxGap);
+	HoughLines(a, lines, 1, CV_PI / linesTheta, linesThresh);
+	//HoughLinesP(a, lines, linesRho, CV_PI / linesTheta, linesThresh, linesMinLength, linesMaxGap);
 
-	for (size_t i = 0; i < lines.size(); i++) {
+	for (size_t i = 0; i < lines.size() && i < 3; i++) {
 
 		Point pt1, pt2;
 
@@ -110,9 +111,18 @@ void CarDetection::findSolidLines(Mat& a) {
 		pt2.x = cvRound(x0 - 1000 * (-b));
 		pt2.y = cvRound(y0 - 1000 * (a));
 
-		line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 150, 0), 2, 8);
-		//line(drawOn, pt1, pt2, Scalar(255,255,255), 1, CV_AA);
+		if (i == 0) { cout << "***************ON FRAME " << frame << " *************************" << endl; }
+
+		cout << "rho = " << rho << " theta = " << theta << endl;
+		cout << "a = cos(theta) " << a << " b = sin(theta) " << b << endl;
+		cout << "x0 = a*roh " << x0 << " y0 = b*rho " << y0 << endl;
+		cout << "pts " << pt1 << ", " << pt2 << endl << endl;
+
+		//line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 150, 0), 2, 8);
+
+		line(drawOn, pt1, pt2, Scalar(0,0,255), 1, 8);
 	}
+	frame++;
 }
 
 Mat CarDetection::getThreshold() {
