@@ -15,25 +15,24 @@ void CarDetection::carDetect(string imgName){
 
 	cvt2GRAY(img);
 	adjustContrast(img, iValueForContrast, iValueForBrightness);
-	medianBlur(img, img, 11);
+	//medianBlur(img, img, 11);
+
+	GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
 	imshow("after  blur", img);
 
-	//GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
-	
 	if (fgImg.empty()) {
 		fgImg.create(img.size(), img.type());
 	}
 
 	bg_model->apply(img, blob, 0);
 
-	threshold(blob, blob, minThresh, maxThresh, THRESH_BINARY);
-
-	imshow("blob before", blob);
-
 	fgImg = Scalar::all(0);
 	img.copyTo(fgImg, blob);
 
 	bg_model->getBackgroundImage(bgImg);
+
+	threshold(blob, blob, minThresh, maxThresh, THRESH_BINARY);
+	imshow("blob before", blob);
 
 	Mat bgImgCopy = img.clone();
 	findSolidLines(bgImgCopy);
@@ -41,7 +40,7 @@ void CarDetection::carDetect(string imgName){
 	//threshold(bgImg, bgImgCopy, minThresh, maxThresh, THRESH_BINARY);
 	//imshow("bgImg thresh", bgImgCopy);
 
-	//RemoveBySize(blob, 200);
+	RemoveBySize(blob, 500);
 
 	ErodeDilate(blob, erodeAmount, dilateAmount);
 	findContours(blob, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
@@ -55,10 +54,11 @@ void CarDetection::carDetect(string imgName){
 
 	for (int i = 0; i < contours.size(); i++) {
 		
-		approxPolyDP(Mat(contours[i]), contours[i], 0, true);
+		//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
 
 		drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
-		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 2, 8, vector<Vec4i>(), 0, Point());
+		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 1, 8, vector<Vec4i>(), 0, Point());
+
 		Point center = getShapeCenter(contours[i]);
 
 		circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
@@ -110,7 +110,7 @@ void CarDetection::findSolidLines(Mat& a) {
 		pt2.x = cvRound(x0 - 1000 * (-b));
 		pt2.y = cvRound(y0 - 1000 * (a));
 
-		line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 150, 0), 1, 8);
+		line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 150, 0), 2, 8);
 		//line(drawOn, pt1, pt2, Scalar(255,255,255), 1, CV_AA);
 	}
 }

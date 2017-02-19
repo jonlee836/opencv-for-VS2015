@@ -37,11 +37,11 @@ private:
 	int erodeAmount = 5;
 	int dilateAmount = 15;
 
-	int linesRho = 15;
+	int linesRho = 1;
 	int linesTheta = 180;
-	int linesThresh = 150;
+	int linesThresh = 160;
 	int linesMinLength = 40;
-	int linesMaxGap = 10;
+	int linesMaxGap = 200;
 
 	vector<vector<Point> > contours;
 	
