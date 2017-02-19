@@ -12,11 +12,11 @@ void CarDetection::carDetect(string imgName,int _minThresh, int _maxThresh){
 
 	resize(InputImage, InputImage, Size(640, 480));
 
-	imshow("input image before", InputImage);
+	imshow("input before", InputImage);
 
 	cvt2EqualizeIntensity(InputImage);
 
-	//imshow("input equalized", InputImage);
+	imshow("input after", InputImage);
 
 	drawOn = InputImage.clone();
 

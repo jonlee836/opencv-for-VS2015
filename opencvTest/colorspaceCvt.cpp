@@ -35,23 +35,17 @@ void cvt2EqualizeImg(Mat& a) {
 
 }
 
-Mat cvt2EqualizeIntensity(const Mat& inputImage) {
+void cvt2EqualizeIntensity(Mat& inputImage) {
 	if (inputImage.channels() >= 3) {
-		Mat ycrcb;
 
-		cvtColor(inputImage, ycrcb, CV_BGR2YCrCb);
+		cvtColor(inputImage, inputImage, CV_BGR2Luv);
 
 		vector<Mat> channels;
-		split(ycrcb, channels);
+		split(inputImage, channels);
 
 		equalizeHist(channels[0], channels[0]);
+		merge(channels, inputImage);
 
-		Mat result;
-		merge(channels, ycrcb);
-
-		cvtColor(ycrcb, result, CV_YCrCb2BGR);
-
-		return result;
+		cvtColor(inputImage, inputImage, CV_Luv2BGR);
 	}
-	return Mat();
 }
