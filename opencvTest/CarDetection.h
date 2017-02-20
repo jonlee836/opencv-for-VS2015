@@ -48,6 +48,8 @@ private:
 	int cannyThresh1 = 50;
 	int cannyThresh2 = 150;
 
+	double getR = CV_PI / 180;
+
 	vector<vector<Point> > contours;
 	
 	vector<Point> prevPoints, currPoints;
