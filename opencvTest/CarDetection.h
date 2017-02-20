@@ -49,6 +49,7 @@ private:
 	int cannyThresh2 = 150;
 
 	double getR = CV_PI / 180;
+	double getD = 180 / CV_PI;
 
 	vector<vector<Point> > contours;
 	

@@ -51,27 +51,27 @@ void CarDetection::carDetect(string imgName){
 		convexHull(Mat(contours[i]), hull[i], false);
 	}
 
-	for (int i = 0; i < contours.size(); i++) {
-		
-		//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
+for (int i = 0; i < contours.size(); i++) {
 
-		drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
-		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 1, 8, vector<Vec4i>(), 0, Point());
+	//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
 
-		Point center = getShapeCenter(contours[i]);
+	drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
+	drawContours(drawOn, hull, i, Scalar(0, 0, 255), 1, 8, vector<Vec4i>(), 0, Point());
 
-		circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
-	}
+	Point center = getShapeCenter(contours[i]);
 
-	imshow(WINDOW_CARDETECT, drawOn);
+	circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
 }
 
-void CarDetection::trackPoints(vector<Point>& a){
-	
+imshow(WINDOW_CARDETECT, drawOn);
+}
+
+void CarDetection::trackPoints(vector<Point>& a) {
+
 }
 
 void CarDetection::findSolidLines(Mat& a) {
-	
+
 	vector<Vec2f> lines;
 
 	/*
@@ -82,7 +82,7 @@ void CarDetection::findSolidLines(Mat& a) {
 
 	Each line is represented by a 2 element vector of rho and theta.
 	rho is the distance from coordinate origin (0,0 aka the top left corner of the image. This is just how opencv works)
-	
+
 	arg 3.) rho : Distance resolution of the accumulator in pixels.
 	arg 4.) theta : Angle resolution of the accumulator in radians.
 	arg 5.) threshold : Only those lines with X number of votes
@@ -91,7 +91,7 @@ void CarDetection::findSolidLines(Mat& a) {
 
 	Canny(a, a, cannyThresh1, cannyThresh2);
 	imshow("canny", a);
-	
+
 	// If linesRho is 0 it crashes
 	if (linesRho <= 0) { linesRho = 1; }
 
@@ -131,41 +131,29 @@ void CarDetection::findSolidLines(Mat& a) {
 	//	//line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 150, 0), 2, 8);
 	//}
 
-	vector<Vec4f> linesHlp;
+	vector<Vec4i> linesHlp;
 	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
 
 	for (size_t i = 0; i < linesHlp.size(); i++) {
 
-		Point pt1, pt2;
+		Vec4i l = linesHlp[i];
+		Point p1, p2;
+		p1 = Point(l[0], l[1]);
+		p2 = Point(l[2], l[3]);
+		//calculate angle in radian,  if you need it in degrees just do angle * 180 / PI
 
-		float rho = linesHlp[i][0];
-		float theta = linesHlp[i][1];
-					
-		double a = cos(theta), b = sin(theta);
-		double x0 = a*rho, y0 = b*rho;
+		float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
 
-		pt1.x = cvRound(x0 + 1000 * (-b));
-		pt1.y = cvRound(y0 + 1000 * (a));
-		pt2.x = cvRound(x0 - 1000 * (-b));
-		pt2.y = cvRound(y0 - 1000 * (a));
+		//cout << "radians : " << angle;
+		
+		if (angle < 0) {angle = abs(angle) + 180;}
 
-		/*if (i == 0) { cout << "***************ON FRAME " << frame << " *************************" << endl; }
+		//cout << " degrees : " << angle << endl;
 
-		cout << "rho = " << rho << " theta = " << theta << endl;
-		cout << "a = cos(theta) " << a << " b = sin(theta) " << b << endl;
-		cout << "x0 = a*roh " << x0 << " y0 = b*rho " << y0 << endl;
-		cout << "pts " << pt1 << ", " << pt2 << endl << endl;*/
-				
-		if (theta < 120 && theta > 60)
-		{
-			cout << "point x0 = " << x0 << " point y0 = " << y0 << endl;
-			cout << "rho = " << rho << " theta = " << theta << endl;
-			cout << "a = cos(theta) " << a << " b = sin(theta) " << b << endl;
-			cout << "x0 = a*roh " << x0 << " y0 = b*rho " << y0 << endl;
-			cout << "pts " << pt1 << ", " << pt2 << endl << endl;
-
-			line(drawOn, Point(linesHlp[i][0], linesHlp[i][1]), Point(linesHlp[i][2], linesHlp[i][3]), Scalar(255, 150, 0), 2, 8);
-		}	
+		if ((angle < 120 && angle > 60) || (angle > 240 && angle < 300)){
+			line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
+		}
+		
 	}
 	frame++;
 }
