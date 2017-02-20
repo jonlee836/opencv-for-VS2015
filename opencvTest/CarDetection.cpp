@@ -95,8 +95,6 @@ void CarDetection::findSolidLines(Mat& a) {
 
 	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
 
-	cout << linesHlp.size() << endl;
-
 	for (size_t i = 0; i < linesHlp.size(); i++) {
 
 		Vec4i l = linesHlp[i];
