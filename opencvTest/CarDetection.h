@@ -28,7 +28,7 @@ private:
 	int frame = 0;
 
 	string WINDOW_CARDETECT = "car detect";
-	const string TRACKBAR_CARDETECT = "car detect trackbar";
+	const string tbCar = "car detect trackbar";
 	
 	int minThresh = 10;
 	int maxThresh = 255;
@@ -48,8 +48,12 @@ private:
 	int cannyThresh1 = 50;
 	int cannyThresh2 = 150;
 
-	double getR = CV_PI / 180;
-	double getD = 180 / CV_PI;
+	int minD1 = 60; int maxD1 = 120;
+	int minD2 = 240; int maxD2 = 300;
+
+	const double getR = CV_PI / 180;
+	const double getD = 180 / CV_PI;
+	const int DEGREES = 360;
 
 	vector<vector<Point> > contours;
 	
@@ -63,30 +67,36 @@ private:
 	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorKNN(500, 400, true);
 
 public:
-	
+
 	CarDetection::CarDetection() {
 
-		namedWindow(TRACKBAR_CARDETECT, WINDOW_NORMAL);
+		namedWindow(tbCar, WINDOW_NORMAL);
 
-		createTrackbar("minThresh", TRACKBAR_CARDETECT, &minThresh, 255);
-		createTrackbar("maxThresh", TRACKBAR_CARDETECT, &maxThresh, 255);
+		createTrackbar("minThresh", tbCar, &minThresh, 255);
+		createTrackbar("maxThresh", tbCar, &maxThresh, 255);
 
-		createTrackbar("contrast", TRACKBAR_CARDETECT, &iValueForContrast, 400);
-		createTrackbar("brightness", TRACKBAR_CARDETECT, &iValueForBrightness, 400);
+		createTrackbar("contrast", tbCar, &iValueForContrast, 400);
+		createTrackbar("brightness", tbCar, &iValueForBrightness, 400);
 		
-		createTrackbar("erode", TRACKBAR_CARDETECT, &erodeAmount, 20);
-		createTrackbar("dilate", TRACKBAR_CARDETECT, &dilateAmount, 20);
+		createTrackbar("erode", tbCar, &erodeAmount, 20);
+		createTrackbar("dilate", tbCar, &dilateAmount, 20);
 
-		createTrackbar("Rho", TRACKBAR_CARDETECT, &linesRho, 200);
-		createTrackbar("Theta", TRACKBAR_CARDETECT, &linesTheta, 200);
+		createTrackbar("Rho", tbCar, &linesRho, 200);
+		createTrackbar("Theta", tbCar, &linesTheta, 200);
 
-		createTrackbar("Thresh", TRACKBAR_CARDETECT, &linesThresh, 300);
-		createTrackbar("MinLength", TRACKBAR_CARDETECT, &linesMinLength, 300);
+		createTrackbar("Thresh", tbCar, &linesThresh, 300);
+		createTrackbar("MinLength", tbCar, &linesMinLength, 300);
 
-		createTrackbar("MaxGap", TRACKBAR_CARDETECT, &linesMaxGap, 300);
+		createTrackbar("MaxGap", tbCar, &linesMaxGap, 300);
 
-		createTrackbar("canny thresh1", TRACKBAR_CARDETECT, &cannyThresh1, 300);
-		createTrackbar("canny thresh2", TRACKBAR_CARDETECT, &cannyThresh2, 300);
+		createTrackbar("canny thresh1", tbCar, &cannyThresh1, 300);
+		createTrackbar("canny thresh2", tbCar, &cannyThresh2, 300);
+
+		createTrackbar("minD 1", tbCar, &minD1, DEGREES);
+		createTrackbar("maxD 1", tbCar, &maxD1, DEGREES);
+		createTrackbar("minD 2", tbCar, &minD2, DEGREES);
+		createTrackbar("maxD 2", tbCar, &maxD2, DEGREES);
+
 	}
 
 	/*void MyCallbackForBrightness(int iValueForBrightness, void *userData) {

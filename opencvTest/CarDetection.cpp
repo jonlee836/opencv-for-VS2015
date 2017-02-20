@@ -72,8 +72,6 @@ void CarDetection::trackPoints(vector<Point>& a) {
 
 void CarDetection::findSolidLines(Mat& a) {
 
-	vector<Vec2f> lines;
-
 	/*
 	HoughLines
 
@@ -93,12 +91,17 @@ void CarDetection::findSolidLines(Mat& a) {
 	imshow("canny", a);
 
 	vector<Vec4i> linesHlp;
+	linesHlp.resize(10);
+
 	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
+
+	cout << linesHlp.size() << endl;
 
 	for (size_t i = 0; i < linesHlp.size(); i++) {
 
 		Vec4i l = linesHlp[i];
 		Point p1, p2;
+
 		p1 = Point(l[0], l[1]);
 		p2 = Point(l[2], l[3]);
 
@@ -106,7 +109,7 @@ void CarDetection::findSolidLines(Mat& a) {
 		
 		if (angle < 0) {angle = abs(angle) + 180;}
 
-		if ((angle < 120 && angle > 60) || (angle > 240 && angle < 300)){
+		if ((angle > minD1 && angle < maxD1) || (angle > minD2 && angle < maxD2)){
 			line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
 		}
 		
