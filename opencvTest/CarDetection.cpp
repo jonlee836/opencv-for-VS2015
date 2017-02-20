@@ -92,45 +92,6 @@ void CarDetection::findSolidLines(Mat& a) {
 	Canny(a, a, cannyThresh1, cannyThresh2);
 	imshow("canny", a);
 
-	// If linesRho is 0 it crashes
-	if (linesRho <= 0) { linesRho = 1; }
-
-	HoughLines(a, lines, linesRho, getR, linesThresh, 0, 0);
-
-	//for (size_t i = 0; i < lines.size(); i++) {
-
-	//	Point pt1, pt2;
-
-	//	float rho = lines[i][0];
-	//	float theta = lines[i][1];
-
-	//	double a = cos(theta), b = sin(theta);
-	//	double x0 = a*rho, y0 = b*rho;
-
-	//	pt1.x = cvRound(x0 + 1000 * (-b));
-	//	pt1.y = cvRound(y0 + 1000 * (a));
-	//	pt2.x = cvRound(x0 - 1000 * (-b));
-	//	pt2.y = cvRound(y0 - 1000 * (a));
-
-	//	/*if (i == 0) { cout << "***************ON FRAME " << frame << " *************************" << endl; }
-
-	//	cout << "rho = " << rho << " theta = " << theta << endl;
-	//	cout << "a = cos(theta) " << a << " b = sin(theta) " << b << endl;
-	//	cout << "x0 = a*roh " << x0 << " y0 = b*rho " << y0 << endl;
-	//	cout << "pts " << pt1 << ", " << pt2 << endl << endl;*/
-
-	//	//vertical
-	//	/*if (theta > getR * 150 || theta < getR * 40) {
-	//		line(drawOn, pt1, pt2, Scalar(0, 0, 255), 1, 8);
-	//	}*/
-
-	//	/*if (theta > CV_PI / 180 * 80 && theta < CV_PI / 180 * 100){
-	//		line(drawOn, pt1, pt2, Scalar(0, 155, 255), 1, 8);
-	//	}*/
-
-	//	//line(drawOn, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(255, 150, 0), 2, 8);
-	//}
-
 	vector<Vec4i> linesHlp;
 	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
 
@@ -140,15 +101,10 @@ void CarDetection::findSolidLines(Mat& a) {
 		Point p1, p2;
 		p1 = Point(l[0], l[1]);
 		p2 = Point(l[2], l[3]);
-		//calculate angle in radian,  if you need it in degrees just do angle * 180 / PI
 
 		float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
-
-		//cout << "radians : " << angle;
 		
 		if (angle < 0) {angle = abs(angle) + 180;}
-
-		//cout << " degrees : " << angle << endl;
 
 		if ((angle < 120 && angle > 60) || (angle > 240 && angle < 300)){
 			line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
