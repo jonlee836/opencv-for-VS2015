@@ -48,11 +48,9 @@ void CarDetection::carDetect(string imgName){
 
 	DOH(showAllWindows, nw_thresh_before, blob);
 
-	Mat bgImgCopy = img.clone(); 	// Get solid lines from the background
+	findSolidLines(img);
 
-	findSolidLines(bgImgCopy);
-
-	DOH(showAllWindows, nw_canny, bgImgCopy);
+	DOH(showAllWindows, nw_canny, img);
 
 	RemoveBySize(blob, 500);
 	ErodeDilate(blob, erodeAmount, dilateAmount, 2);

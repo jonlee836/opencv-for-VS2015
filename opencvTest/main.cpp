@@ -38,6 +38,7 @@ int main(int argc, char** argv)
 
 	cv::Mat InputImage;
 
+	parseVideoInput vidIO(inputPath);
 	parseImageInput imgIO(inputPath);
 	imagepathArray = imgIO.getfiles(directory);
 

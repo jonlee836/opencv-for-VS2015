@@ -76,7 +76,7 @@ private:
 	Mat chans[3];
 
 	Point pointArray[10];
-	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorMOG2(50);
+	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorKNN(50);
 
 public:
 
