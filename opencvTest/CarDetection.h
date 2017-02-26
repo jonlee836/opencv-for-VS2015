@@ -25,12 +25,23 @@ class CarDetection {
 
 private:
 
+	bool showAllWindows = false;
+
+	int showAll = 0;
 	int frame = 0;
 
-	string WINDOW_CARDETECT = "car detect";
 	const string tbCar = "car detect trackbar";
-	
-	int minThresh = 10;
+
+	const string nw_cardetect = "car detect";
+	const string nw_blur = "blur";
+	const string nw_thresh_before = "thresh blobs before";
+	const string nw_thresh_after = "thresh blobs after";
+	const string nw_canny = "canny lines";
+		
+	int ContourRetreivalMode = 0;
+	int ContourApproximationMethods = 2;
+
+	int minThresh = 250;
 	int maxThresh = 255;
 
 	int iValueForContrast = 400;
@@ -72,6 +83,12 @@ public:
 
 		namedWindow(tbCar, WINDOW_NORMAL);
 
+		namedWindow(nw_cardetect, WINDOW_NORMAL);
+		namedWindow(nw_blur, WINDOW_NORMAL);
+		namedWindow(nw_thresh_before, WINDOW_NORMAL);
+		namedWindow(nw_thresh_after, WINDOW_NORMAL);
+		namedWindow(nw_canny, WINDOW_NORMAL);
+
 		createTrackbar("minThresh", tbCar, &minThresh, 255);
 		createTrackbar("maxThresh", tbCar, &maxThresh, 255);
 
@@ -96,6 +113,10 @@ public:
 		createTrackbar("maxD 1", tbCar, &maxD1, DEGREES);
 		createTrackbar("minD 2", tbCar, &minD2, DEGREES);
 		createTrackbar("maxD 2", tbCar, &maxD2, DEGREES);
+		createTrackbar("show all", tbCar, &showAll, 1);
+
+		createTrackbar("ContourRetreivalMode", tbCar, &ContourRetreivalMode, 0);
+		createTrackbar("ContourApproximationMethods", tbCar, &ContourApproximationMethods, 2);
 
 	}
 
@@ -117,6 +138,7 @@ public:
 	void carDetect(string imgName);
 	void findSolidLines(Mat&a);
 	void trackPoints(vector<Point>& foundPoints);
+	
 };
 
 

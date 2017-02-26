@@ -13,4 +13,6 @@ using namespace std;
 void displayMat(string& windowName, Mat& a);
 void displayMatChans(string& windowName, vector<Mat>& a);
 
+void DOH(bool a, string windowName, Mat& img); // Display Or Hide
+
 #endif // DISPLAYMATH_H

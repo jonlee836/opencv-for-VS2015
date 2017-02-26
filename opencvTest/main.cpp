@@ -33,7 +33,6 @@ int main(int argc, char** argv)
 	//wchar_t *directory = L"C:/opencv/projects/plane detection/*.*";
 
 	bool Allimg = true;
-	char chCheckForEscKey = 0;
 
 	vector<string> imagepathArray;
 
@@ -49,24 +48,34 @@ int main(int argc, char** argv)
 		string name = inputPath + imagepathArray[i];
 
 		while (true) {
-			
+
 			int k = waitKey(1);
 
+			if (char(k) == '`') {
+				
+				do {
+					getline(cin, cmdInput);
+				}
+				while (cmdInput.empty());
+
+				cmdInput.clear();
+			}
+			
 			if (char(k) == '1') { // re-process current frame
 				Allimg = false;
 				findcar.carDetect(name);
 			}
-			else if (char(k) == '2') { Allimg = true; }
+			else if (char(k) == '2') { Allimg = true; } // run all images / video
 			else if (char(k) == 'b' && i > 1) {
 				i--;
 				findcar.carDetect(name);
 				break;
 			}
-			else if (char(k) == 'n' && i < imagepathArray.size()) {
+			else if (char(k) == 'n' && i < imagepathArray.size()) { // next frame
 				if (i == imagepathArray.size() - 1) { i = 0; }
-				else {i++; break;}
+				else { i++; break; }
 			}
-			else if (char(k) == 'q') { return 0; }
+			else if (char(k) == 'q') { return 0; }  // quit
 			else if (Allimg == true) {
 
 				findcar.carDetect(name);
@@ -74,6 +83,7 @@ int main(int argc, char** argv)
 				if (i == imagepathArray.size()) { i = 0; }
 				break;
 			}
+
 		}
 	}
 

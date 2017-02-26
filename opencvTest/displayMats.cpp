@@ -14,3 +14,12 @@ void displayMatChans(string& windowName, vector<Mat>& a) {
 		imshow(windowName+" 3", a[2]);
 	}
 }
+
+void DOH(bool a, string windowName, Mat& img) {
+	if (a == true) {
+		imshow(windowName, img);
+	}
+	else {
+		destroyWindow(windowName);
+	}
+}

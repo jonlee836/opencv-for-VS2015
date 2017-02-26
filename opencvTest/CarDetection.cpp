@@ -2,6 +2,9 @@
 
 void CarDetection::carDetect(string imgName){
 
+	if (showAll == 1) { showAllWindows = true; }
+	else { showAllWindows = false; }
+	
 	img = imread(imgName);
 	
 	vector<vector<Point> > contours;
@@ -17,8 +20,17 @@ void CarDetection::carDetect(string imgName){
 	//medianBlur(img, img, 11);
 
 	GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
-	imshow("after  blur", img);
+	
+	DOH(showAllWindows, nw_blur, img);
 
+	/*const string tbCar = "car detect trackbar";
+
+	const string nw_cardetect = "car detect";
+	const string nw_blur = "blur";
+	const string nw_thresh_before = "thresh blobs";
+	const string nw_canny = "canny lines";
+		*/
+	
 	if (fgImg.empty()) {
 		fgImg.create(img.size(), img.type());
 	}
@@ -27,43 +39,55 @@ void CarDetection::carDetect(string imgName){
 
 	fgImg = Scalar::all(0);
 	img.copyTo(fgImg, blob);
-
 	bg_model->getBackgroundImage(bgImg);
-
 	threshold(blob, blob, minThresh, maxThresh, THRESH_BINARY);
-	imshow("blob before", blob);
 
-	Mat bgImgCopy = img.clone();
+	DOH(showAllWindows, nw_thresh_before, blob);
+
+	Mat bgImgCopy = img.clone(); 	// Get solid lines from the background
 	findSolidLines(bgImgCopy);
 
-	//threshold(bgImg, bgImgCopy, minThresh, maxThresh, THRESH_BINARY);
-	//imshow("bgImg thresh", bgImgCopy);
+	DOH(showAllWindows, nw_canny, bgImgCopy);
 
 	RemoveBySize(blob, 500);
-
 	ErodeDilate(blob, erodeAmount, dilateAmount);
-	findContours(blob, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
-	imshow("blob after", blob);
+	findContours(blob, contours, ContourRetreivalMode, CV_CHAIN_APPROX_SIMPLE);
+	
+	/*  CV_RETR_EXTERNAL = 0,
+		CV_RETR_LIST = 1,
+		CV_RETR_CCOMP = 2,
+		CV_RETR_TREE = 3,
+		CV_RETR_FLOODFILL = 4 */
+	
+	/*	CV_CHAIN_CODE = 0,
+		CV_CHAIN_APPROX_NONE = 1,
+		CV_CHAIN_APPROX_SIMPLE = 2,
+		CV_CHAIN_APPROX_TC89_L1 = 3,
+		CV_CHAIN_APPROX_TC89_KCOS = 4,
+		CV_LINK_RUNS = 5 */
+
+	DOH(showAllWindows, nw_thresh_after, blob);
+
 	vector<vector<Point> >hull(contours.size());
 
 	for (int i = 0; i < contours.size(); i++) {
 		convexHull(Mat(contours[i]), hull[i], false);
 	}
 
-for (int i = 0; i < contours.size(); i++) {
+	for (int i = 0; i < contours.size(); i++) {
 
-	//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
+		//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
 
-	drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
-	drawContours(drawOn, hull, i, Scalar(0, 0, 255), 1, 8, vector<Vec4i>(), 0, Point());
+		drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
+		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 1, 8, vector<Vec4i>(), 0, Point());
 
-	Point center = getShapeCenter(contours[i]);
+		Point center = getShapeCenter(contours[i]);
 
-	circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
-}
+		circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
+	}
 
-imshow(WINDOW_CARDETECT, drawOn);
+	imshow(nw_cardetect, drawOn);
 }
 
 void CarDetection::trackPoints(vector<Point>& a) {
@@ -88,7 +112,6 @@ void CarDetection::findSolidLines(Mat& a) {
 	*/
 
 	Canny(a, a, cannyThresh1, cannyThresh2);
-	imshow("canny", a);
 
 	vector<Vec4i> linesHlp;
 	linesHlp.resize(10);
