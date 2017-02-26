@@ -43,6 +43,7 @@ private:
 
 	int minThresh = 250;
 	int maxThresh = 255;
+	int bgThresh = 400;
 
 	int iValueForContrast = 400;
 	int iValueForBrightness = 0;
@@ -75,7 +76,7 @@ private:
 	Mat chans[3];
 
 	Point pointArray[10];
-	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorKNN(500, 400, true);
+	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorMOG2(50);
 
 public:
 
@@ -117,6 +118,7 @@ public:
 
 		createTrackbar("ContourRetreivalMode", tbCar, &ContourRetreivalMode, 0);
 		createTrackbar("ContourApproximationMethods", tbCar, &ContourApproximationMethods, 2);
+		createTrackbar("bg thresh", tbCar, &bgThresh, 2000);
 
 	}
 

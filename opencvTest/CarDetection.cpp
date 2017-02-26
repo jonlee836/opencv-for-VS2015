@@ -2,6 +2,7 @@
 
 void CarDetection::carDetect(string imgName){
 
+	
 	if (showAll == 1) { showAllWindows = true; }
 	else { showAllWindows = false; }
 	
@@ -15,12 +16,12 @@ void CarDetection::carDetect(string imgName){
 	imshow("input", img);
 	drawOn = img.clone();
 	
+	GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
+
 	cvt2GRAY(img);
 	adjustContrast(img, iValueForContrast, iValueForBrightness);
 	//medianBlur(img, img, 11);
 
-	GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
-	
 	DOH(showAllWindows, nw_blur, img);
 
 	/*const string tbCar = "car detect trackbar";
@@ -35,22 +36,26 @@ void CarDetection::carDetect(string imgName){
 		fgImg.create(img.size(), img.type());
 	}
 
-	bg_model->apply(img, blob, 0);
+	bg_model->apply(img, blob);
 
 	fgImg = Scalar::all(0);
 	img.copyTo(fgImg, blob);
 	bg_model->getBackgroundImage(bgImg);
+
+	imshow("bgimg", bgImg);
+
 	threshold(blob, blob, minThresh, maxThresh, THRESH_BINARY);
 
 	DOH(showAllWindows, nw_thresh_before, blob);
 
 	Mat bgImgCopy = img.clone(); 	// Get solid lines from the background
+
 	findSolidLines(bgImgCopy);
 
 	DOH(showAllWindows, nw_canny, bgImgCopy);
 
 	RemoveBySize(blob, 500);
-	ErodeDilate(blob, erodeAmount, dilateAmount);
+	ErodeDilate(blob, erodeAmount, dilateAmount, 2);
 
 	findContours(blob, contours, ContourRetreivalMode, CV_CHAIN_APPROX_SIMPLE);
 	

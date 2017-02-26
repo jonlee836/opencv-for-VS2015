@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 
 		while (true) {
 
-			int k = waitKey(1);
+			int k = waitKey(10);
 
 			if (char(k) == '`') {
 				
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 				Allimg = false;
 				findcar.carDetect(name);
 			}
-			else if (char(k) == '2') { Allimg = true; } // run all images / video
+			else if (char(k) == '2') { Allimg = true; } // run all images / video forward
 			else if (char(k) == 'b' && i > 1) {
 				i--;
 				findcar.carDetect(name);

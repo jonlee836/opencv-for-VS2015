@@ -12,6 +12,6 @@ using namespace std;
 
 void RemoveBySize(Mat& a, int minArea);
 void FillShapes(Mat& a);
-void ErodeDilate(Mat& a, int ea, int da);
+void ErodeDilate(Mat& a, int ea, int da, int shape);
 
 #endif // SHAPEMATS_H
