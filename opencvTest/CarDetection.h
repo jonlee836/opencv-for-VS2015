@@ -25,20 +25,21 @@ class CarDetection {
 
 private:
 
-	bool showAllWindows = false;
-
-	int showAll = 0;
-	int frame = 0;
-
-	const int maxNumbShapes = 20;
-
 	const string tbCar = "car detect trackbar";
 	const string nw_cardetect = "car detect";
 	const string nw_blur = "blur";
 	const string nw_thresh_before = "thresh blobs before";
 	const string nw_thresh_after = "thresh blobs after";
 	const string nw_canny = "canny lines";
-		
+
+	bool showAllWindows = false;
+
+	int showAll = 0;
+	int frame = 0;
+
+	const int maxNumbShapes = 20;
+	const int CarCountDistanceTolerance = 40;
+	
 	int ContourRetreivalMode = 0;
 	int ContourApproximationMethods = 2;
 
@@ -54,14 +55,14 @@ private:
 
 	int linesRho = 1;
 	int linesTheta = 180;
-	int linesThresh = 125;
+	int linesThresh = 40;
 	int linesMinLength = 40;
-	int linesMaxGap = 200;
+	int linesMaxGap = 360;
 
 	int cannyThresh1 = 50;
 	int cannyThresh2 = 150;
 
-	int minD1 = 60; int maxD1 = 120;
+	int minD1 = 60; int maxD1 = 360;
 	int minD2 = 240; int maxD2 = 300;
 
 	const double getR = CV_PI / 180;
@@ -69,9 +70,10 @@ private:
 	const int DEGREES = 360;
 
 	vector<vector<Point> > contours;
-	
-	vector<Point> prevPoints, currPoints;
 	vector<Vec4i> hierarchy;
+
+	vector<Point> currPoints, prevPoints;
+	vector<vector<Point> > foundPoints;
 
 	Mat img, drawOn, lineMat, blob, bgImg, fgImg;
 	Mat chans[3];

@@ -6,7 +6,7 @@ void CarDetection::carDetect(Mat& a){
 
 	if (showAll == 1) { showAllWindows = true; }
 	else { showAllWindows = false; }
-		
+	
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
@@ -77,24 +77,49 @@ void CarDetection::carDetect(Mat& a){
 		convexHull(Mat(contours[i]), hull[i], false);
 	}
 
-	for (int i = 0; i < contours.size() && i < maxNumbShapes; i++) {
-
-		//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
+	for (int i = 0; i < contours.size() && i < 1000; i++) {
+		
+		approxPolyDP(Mat(contours[i]), contours[i], 0, true);
 
 		drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
 		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 1, 8, vector<Vec4i>(), 0, Point());
 
 		Point center = getShapeCenter(contours[i]);
+		currPoints.push_back(center);
 
 		circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
 	}
+
+	trackPoints(currPoints);
 
 	imshow(nw_cardetect, drawOn);
 }
 
 void CarDetection::trackPoints(vector<Point>& a) {
 
+	if (!prevPoints.empty()) {
+		cout << endl;
+		cout << "at frame " << frame << endl;
 
+		for (int c = 0; c < currPoints.size(); c++) {
+			cout << c << " curr point " << currPoints[c] << endl;
+
+			for (int p = 0; p < prevPoints.size(); p++) {
+				double dist = getPointdist(currPoints[c], prevPoints[p]);
+
+				if (dist <= CarCountDistanceTolerance) {
+					cout << "    " << p << " prev point " << prevPoints[p] << " distance = " << dist << endl;
+				}
+			}
+		}
+
+		prevPoints = currPoints;
+		currPoints.clear();
+	}
+	else {
+		prevPoints = a;
+		cout << "size of prevPoint vector is " << prevPoints.size() << endl;
+	}
 
 }
 
