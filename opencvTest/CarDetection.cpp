@@ -112,19 +112,20 @@ void CarDetection::trackPoints(vector<Point>& a) {
 				double dist = getPointdist(currPoints[c], prevPoints[p]);
 
 				if (dist <= CarCountDistanceTolerance) {
-					validPoints.push_back(currPoints[c]);			
+					validPoints.push_back(currPoints[c]);
 				}
 			}
 		}
 
-		if (foundPoints.empty()) {
-			foundPoints.resize(foundPoints.size());
+		// foundPoints[r][0] being -1,-1 indicates the rest of the row is empty
 
-			for (int i = 0; i < foundPoints.size();; i++) {
-				foundPoints[i].push_back(validPoints[i]);
+		int vIt = 0;
+		for (int r = 0; r < foundPoints.size(); r++) {
+			if (foundPoints[r][0] == Point(-1, -1)) {
+				foundPoints[r][0] = validPoints[vIt];
+				vIt++;
 			}
 		}
-
 		
 		/*
 			compare to previous found points points
@@ -140,19 +141,27 @@ void CarDetection::trackPoints(vector<Point>& a) {
 
 		*/
 
-		else {
-			for (int v = 0; v < validPoints.size(); v++) {
-				for (int r = 0; r < foundPoints.size(); r++) {
-					for (int c = 0; c < foundPoints[r].size(); c++) {
+		for (int r = 0; r < foundPoints.size(); r++) {
+			for (int c = 0; c < foundPoints[r].size(); c++) {
+				for (int v = 0; v < validPoints.size() && foundPoints[r][c] == Point(-1,-1); v++) {
+					// compare foundPoints to validPoints (currPoints vs prevPoints)
+						
+					if (getPointdist(foundPoints[r][c], validPoints[v]) <= CarCountDistanceTolerance) {
 
-						// compare foundPoints to validPoints (currPoints vs prevPoints)
+						// fill row with -1,-1 to show it's been cleared
 
-						if (getPointdist(foundPoints[r][c], validPoints[v])) {
-							
+						if (c == foundPoints[r].size() - 1) {
+							for (int z = 0; z < foundPoints[r].size(); z++) {
+								foundPoints[r][z] = Point(-1, -1);
+							}
+							CarsCounted++;
+							cout << " Cars Counted " << CarsCounted << endl;
 						}
+						cout << validPoints[v] << endl;
+
 					}
 				}
-			}			
+			}
 		}
 
 		prevPoints = currPoints;
@@ -160,7 +169,6 @@ void CarDetection::trackPoints(vector<Point>& a) {
 	}
 	else {
 		prevPoints = a;
-		cout << "size of prevPoint vector is " << prevPoints.size() << endl;
 	}
 
 }

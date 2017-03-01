@@ -40,6 +40,8 @@ private:
 	const int maxNumbShapes = 20;
 	const int CarCountDistanceTolerance = 40;
 	const int CarMaxCount = 7; // car moved 7 frames in a row
+
+	int CarsCounted = 0;
 	
 	int ContourRetreivalMode = 0;
 	int ContourApproximationMethods = 2;
@@ -74,7 +76,8 @@ private:
 	vector<Vec4i> hierarchy;
 
 	vector<Point> currPoints, prevPoints;
-	vector<vector<Point> > foundPoints;
+	
+	array<array<Point, 10>, 30> foundPoints;
 
 	Mat img, drawOn, lineMat, blob, bgImg, fgImg;
 	Mat chans[3];
@@ -85,6 +88,15 @@ private:
 public:
 
 	CarDetection::CarDetection() {
+
+		// fill array with -1,-1 to note it's empty
+		Point a = Point(-1, -1);
+
+		for (int i = 0; i < foundPoints.size(); i++) {
+			for (int k = 0; k < foundPoints[i].size(); k++) {
+				foundPoints[i][k] = a;
+			}
+		}
 
 		namedWindow(tbCar, WINDOW_NORMAL);
 
@@ -144,7 +156,7 @@ public:
 	void carDetect(Mat& a);
 	void findSolidLines(Mat&a);
 	void trackPoints(vector<Point>& foundPoints);
-	
+
 };
 
 
