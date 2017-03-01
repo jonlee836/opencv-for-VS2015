@@ -1,13 +1,12 @@
 #include "CarDetection.h"
 
-void CarDetection::carDetect(string imgName){
-
+void CarDetection::carDetect(Mat& a){
 	
+	img = a.clone();
+
 	if (showAll == 1) { showAllWindows = true; }
 	else { showAllWindows = false; }
-	
-	img = imread(imgName);
-	
+		
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
@@ -16,9 +15,10 @@ void CarDetection::carDetect(string imgName){
 	imshow("input", img);
 	drawOn = img.clone();
 	
+	cvt2GRAY(img);
 	GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
 
-	cvt2GRAY(img);
+	//cvt2EqualizeIntensity(img);
 	adjustContrast(img, iValueForContrast, iValueForBrightness);
 	//medianBlur(img, img, 11);
 
@@ -42,7 +42,7 @@ void CarDetection::carDetect(string imgName){
 	img.copyTo(fgImg, blob);
 	bg_model->getBackgroundImage(bgImg);
 
-	imshow("bgimg", bgImg);
+	//imshow("bgimg", bgImg);
 
 	threshold(blob, blob, minThresh, maxThresh, THRESH_BINARY);
 
@@ -54,7 +54,6 @@ void CarDetection::carDetect(string imgName){
 
 	RemoveBySize(blob, 500);
 	ErodeDilate(blob, erodeAmount, dilateAmount, 2);
-
 	findContours(blob, contours, ContourRetreivalMode, CV_CHAIN_APPROX_SIMPLE);
 	
 	/*  CV_RETR_EXTERNAL = 0,
@@ -78,7 +77,7 @@ void CarDetection::carDetect(string imgName){
 		convexHull(Mat(contours[i]), hull[i], false);
 	}
 
-	for (int i = 0; i < contours.size(); i++) {
+	for (int i = 0; i < contours.size() && i < maxNumbShapes; i++) {
 
 		//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
 
@@ -94,6 +93,8 @@ void CarDetection::carDetect(string imgName){
 }
 
 void CarDetection::trackPoints(vector<Point>& a) {
+
+
 
 }
 

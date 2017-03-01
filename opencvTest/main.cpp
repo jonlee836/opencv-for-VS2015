@@ -26,6 +26,9 @@ int main(int argc, char** argv)
 
 	string cmdInput;
 
+	string ro2path = "C:/Users/nonroot/Pictures/1/";
+	wchar_t *ro2dir = L"C:/Users/nonroot/Pictures/1/*.*";
+
 	string inputPath = "C:/opencv/projects/car detection/M6_Motorway_Traffic/";
 	wchar_t *directory = L"C:/opencv/projects/car detection/M6_Motorway_Traffic/*.*";
 	
@@ -38,7 +41,6 @@ int main(int argc, char** argv)
 
 	cv::Mat InputImage;
 
-	parseVideoInput vidIO(inputPath);
 	parseImageInput imgIO(inputPath);
 	imagepathArray = imgIO.getfiles(directory);
 
@@ -47,10 +49,11 @@ int main(int argc, char** argv)
 	for (int i = 0; i < imagepathArray.size();) {
 
 		string name = inputPath + imagepathArray[i];
+		InputImage = imread(name);
 
 		while (true) {
 
-			int k = waitKey(10);
+			int k = waitKey(1);
 
 			if (char(k) == '`') {
 				
@@ -64,12 +67,12 @@ int main(int argc, char** argv)
 			
 			if (char(k) == '1') { // re-process current frame
 				Allimg = false;
-				findcar.carDetect(name);
+				findcar.carDetect(InputImage);
 			}
-			else if (char(k) == '2') { Allimg = true; } // run all images / video forward
+			else if (char(k) == '2') { Allimg = true; } // run all images / video
 			else if (char(k) == 'b' && i > 1) {
 				i--;
-				findcar.carDetect(name);
+				findcar.carDetect(InputImage);
 				break;
 			}
 			else if (char(k) == 'n' && i < imagepathArray.size()) { // next frame
@@ -79,7 +82,7 @@ int main(int argc, char** argv)
 			else if (char(k) == 'q') { return 0; }  // quit
 			else if (Allimg == true) {
 
-				findcar.carDetect(name);
+				findcar.carDetect(InputImage);
 				i++;
 				if (i == imagepathArray.size()) { i = 0; }
 				break;

@@ -16,7 +16,7 @@ void displayMatChans(string& windowName, vector<Mat>& a) {
 }
 
 void DOH(bool a, string windowName, Mat& img) {
-	if (a == true) {
+	if (a == true && !img.empty()) {
 		imshow(windowName, img);
 	}
 	else {

@@ -30,8 +30,9 @@ private:
 	int showAll = 0;
 	int frame = 0;
 
-	const string tbCar = "car detect trackbar";
+	const int maxNumbShapes = 20;
 
+	const string tbCar = "car detect trackbar";
 	const string nw_cardetect = "car detect";
 	const string nw_blur = "blur";
 	const string nw_thresh_before = "thresh blobs before";
@@ -48,7 +49,7 @@ private:
 	int iValueForContrast = 400;
 	int iValueForBrightness = 0;
 
-	int erodeAmount = 5;
+	int erodeAmount = 0;
 	int dilateAmount = 15;
 
 	int linesRho = 1;
@@ -76,7 +77,7 @@ private:
 	Mat chans[3];
 
 	Point pointArray[10];
-	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorKNN(50);
+	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorMOG2(50);
 
 public:
 
@@ -137,7 +138,7 @@ public:
 
 	Mat getThreshold();
 
-	void carDetect(string imgName);
+	void carDetect(Mat& a);
 	void findSolidLines(Mat&a);
 	void trackPoints(vector<Point>& foundPoints);
 	
