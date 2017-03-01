@@ -103,6 +103,7 @@ void CarDetection::trackPoints(vector<Point>& a) {
 		cout << c << " curr point " << currPoints[c] << endl;
 		cout << "    " << p << " prev point " << prevPoints[p] << " distance = " << dist << endl;
 	*/
+	cout << "at frame " << frame << endl;
 
 	vector <Point> validPoints;
 
@@ -140,14 +141,18 @@ void CarDetection::trackPoints(vector<Point>& a) {
 			[4]
 
 		*/
-
+		
 		for (int r = 0; r < foundPoints.size(); r++) {
 			for (int c = 0; c < foundPoints[r].size(); c++) {
-				for (int v = 0; v < validPoints.size() && foundPoints[r][c] == Point(-1,-1); v++) {
-					// compare foundPoints to validPoints (currPoints vs prevPoints)
-						
-					if (getPointdist(foundPoints[r][c], validPoints[v]) <= CarCountDistanceTolerance) {
+				if (foundPoints[r][c] == Point(-1, -1) && c >= 1) {
 
+				}
+				for (int v = 0; v < validPoints.size(); v++) {
+					// compare foundPoints to validPoints (currPoints vs prevPoints)
+					double dist = getPointdist(foundPoints[r][c], validPoints[v]);
+
+					if (dist <= CarCountDistanceTolerance && dist > 0) {
+						cout << "[" << r << "]" << "[" << c << "] "  << "dist passed " << endl;
 						// fill row with -1,-1 to show it's been cleared
 
 						if (c == foundPoints[r].size() - 1) {
@@ -156,6 +161,9 @@ void CarDetection::trackPoints(vector<Point>& a) {
 							}
 							CarsCounted++;
 							cout << " Cars Counted " << CarsCounted << endl;
+						}
+						else {
+							foundPoints[r][c] = validPoints[v];
 						}
 						cout << validPoints[v] << endl;
 
