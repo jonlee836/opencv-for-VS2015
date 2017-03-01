@@ -39,6 +39,7 @@ private:
 
 	const int maxNumbShapes = 20;
 	const int CarCountDistanceTolerance = 40;
+	const int CarMaxCount = 7; // car moved 7 frames in a row
 	
 	int ContourRetreivalMode = 0;
 	int ContourApproximationMethods = 2;

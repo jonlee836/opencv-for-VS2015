@@ -97,20 +97,62 @@ void CarDetection::carDetect(Mat& a){
 
 void CarDetection::trackPoints(vector<Point>& a) {
 
-	if (!prevPoints.empty()) {
+	/*
 		cout << endl;
 		cout << "at frame " << frame << endl;
+		cout << c << " curr point " << currPoints[c] << endl;
+		cout << "    " << p << " prev point " << prevPoints[p] << " distance = " << dist << endl;
+	*/
 
+	vector <Point> validPoints;
+
+	if (!prevPoints.empty()) {
 		for (int c = 0; c < currPoints.size(); c++) {
-			cout << c << " curr point " << currPoints[c] << endl;
-
 			for (int p = 0; p < prevPoints.size(); p++) {
 				double dist = getPointdist(currPoints[c], prevPoints[p]);
 
 				if (dist <= CarCountDistanceTolerance) {
-					cout << "    " << p << " prev point " << prevPoints[p] << " distance = " << dist << endl;
+					validPoints.push_back(currPoints[c]);			
 				}
 			}
+		}
+
+		if (foundPoints.empty()) {
+			foundPoints.resize(foundPoints.size());
+
+			for (int i = 0; i < foundPoints.size();; i++) {
+				foundPoints[i].push_back(validPoints[i]);
+			}
+		}
+
+		
+		/*
+			compare to previous found points points
+
+			foundPoints
+
+					[0]       [1]       [2]       [3]       [4]       [5]       [6] -----> up to CarMaxCount
+			[0]   (10,10)   (15,15) 
+			[1]
+			[2]
+			[3]
+			[4]
+
+		*/
+
+		else {
+			for (int v = 0; v < validPoints.size(); v++) {
+				for (int r = 0; r < foundPoints.size(); r++) {
+					for (int c = 0; c < foundPoints[r].size(); c++) {
+
+						// compare foundPoints to validPoints (currPoints vs prevPoints)
+
+						if (getPointdist(foundPoints[r][c], validPoints[v])) {
+							
+						}
+					}
+				}
+			}			
 		}
 
 		prevPoints = currPoints;
