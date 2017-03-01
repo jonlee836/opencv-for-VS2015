@@ -38,7 +38,7 @@ Point reset2dPointArray(array<array<Point, 10>, 30 > a) {
 }
 
 Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr) {
-	for (int c = 0; c < a.size(); c++) {
+	for (int c = 0; c < a[rr].size(); c++) {
 		a[rr][c] = Point(-1, -1);
 	}
 }

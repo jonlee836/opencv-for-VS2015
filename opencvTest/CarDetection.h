@@ -81,6 +81,8 @@ private:
 
 	array<array<Point, 10>, 30> foundPoints{ {neg} };
 	array<array<Point, 10>, 30> resetPoints{ {neg} };
+	array<Point, 10> resetRow{ neg };
+
 
 	Mat img, drawOn, lineMat, blob, bgImg, fgImg;
 	Mat chans[3];

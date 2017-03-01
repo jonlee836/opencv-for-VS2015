@@ -18,6 +18,7 @@ Point getMidpoint(Point a, Point b);
 Point getShapeCenter(vector <Point>& contour);
 
 bool is2dPointArrayNeg(array<array<Point, 10>, 30 > a);
+bool isVPin2dPointArray(array<array<Point, 10>, 30 > a);
 Point reset2dPointArray(array<array<Point, 10>, 30 > a);
 Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr);
 

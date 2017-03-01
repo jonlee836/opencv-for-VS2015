@@ -107,6 +107,7 @@ void CarDetection::trackPoints(vector<Point>& a) {
 	cout << "at frame " << frame << endl;
 
 	vector <Point> validPoints;
+	vector <int> np;
 	
 	validPoints = a;
 
@@ -130,17 +131,70 @@ void CarDetection::trackPoints(vector<Point>& a) {
 		for (int r = 0; r < foundPoints.size(); r++) {
 			for (int c = 0; c < foundPoints[r].size(); c++) {
 				// see if new value needs to be tracked
-				if (foundPoints[r][0] == neg && vpIndex + 1 < vpSize) {
-					foundPoints[r][0] = validPoints[vpIndex];
-					vpIndex++;
-					cout << foundPoints[r][0] << " " << endl;
+
+				// first check if validPoints are found in foundPoints
+				// then add the validPoints that were found but not picked up
+
+				for (int v = 0; v < validPoints.size(); v++) {
+
+					double dist = getPointdist(foundPoints[r][c], validPoints[v]);
+
+					if (dist <= CarCountDistanceTolerance && c + 1 < foundPoints[r].size()) {
+						foundPoints[r][c + 1] = validPoints[v];
+						np.push_back(vpIndex);
+
+						vpIndex++;
+					}
+					else if (dist <= CarCountDistanceTolerance && c + 1 >= foundPoints[r].size()) {
+						np.push_back(vpIndex);
+						vpIndex++;
+
+						// clear row
+						for (int z = 0; z < foundPoints[r].size(); z++) {
+							foundPoints[r][z] = neg;
+						}
+
+						CarsCounted++;
+
+					}
+					/*if (foundPoints[r][0] == neg && vpIndex + 1 < vpSize) {
+						foundPoints[r][0] = validPoints[vpIndex];
+						vpIndex++;
+						cout << foundPoints[r][0] << " " << endl;
+					}*/
+				}
+			}
+		}
+		
+		if (np.size() < validPoints.size()) {
+
+			vector<int> foo, bitwiseVec;
+
+			for (int i = 0; i < np.size(); i++) {
+				int z = i;
+				foo.push_back(z);
+			}
+
+			for (int a = 0; a < np.size(); a++) {
+				if (np[a] != foo[a]) {
+					int bar = foo[a];
+					bitwiseVec.push_back(bar);
+				}
+			}
+
+			int npIt = 0;
+
+			for (int r = 0; r < foundPoints.size() && npIt < bitwiseVec.size(); r++) {
+				for (int c = 0; c < foundPoints[r].size() && npIt < bitwiseVec.size(); c++) {
+					if (foundPoints[r][0] == neg) {
+						int newPoint2TrackIndex = bitwiseVec[npIt];
+						foundPoints[r][0] = validPoints[newPoint2TrackIndex];
+						npIt++;
+					}
 				}
 			}
 		}
 		vpIndex = 0;
-
-
-
 	}
 
 	/*for (int r = 0; r < foundPoints.size(); r++) {
