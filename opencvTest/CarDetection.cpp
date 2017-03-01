@@ -91,6 +91,7 @@ void CarDetection::carDetect(Mat& a){
 	}
 
 	trackPoints(currPoints);
+	currPoints.clear();
 
 	imshow(nw_cardetect, drawOn);
 }
@@ -106,78 +107,48 @@ void CarDetection::trackPoints(vector<Point>& a) {
 	cout << "at frame " << frame << endl;
 
 	vector <Point> validPoints;
+	
+	validPoints = a;
 
-	if (!prevPoints.empty()) {
-		for (int c = 0; c < currPoints.size(); c++) {
-			for (int p = 0; p < prevPoints.size(); p++) {
-				double dist = getPointdist(currPoints[c], prevPoints[p]);
+	int vpIndex = 0;
+	int vpSize = validPoints.size();
+	
+	cout << "validPoints size " << validPoints.size() << " a size " << a.size() << endl;
+	cout << "found points size r and c " << foundPoints.size() << " " << foundPoints[0].size() << endl;
 
-				if (dist <= CarCountDistanceTolerance) {
-					validPoints.push_back(currPoints[c]);
-				}
-			}
-		}
-
-		// foundPoints[r][0] being -1,-1 indicates the rest of the row is empty
-
-		int vIt = 0;
+	if (validPoints.empty()) {
+		// reset
+		cout << " validPoints.empty() " << endl;
 		for (int r = 0; r < foundPoints.size(); r++) {
-			if (foundPoints[r][0] == Point(-1, -1)) {
-				foundPoints[r][0] = validPoints[vIt];
-				vIt++;
+			for (int z = 0; z < foundPoints[r].size(); z++) {
+				foundPoints[r][z] = neg;
 			}
-		}
-		
-		/*
-			compare to previous found points points
-
-			foundPoints
-
-					[0]       [1]       [2]       [3]       [4]       [5]       [6] -----> up to CarMaxCount
-			[0]   (10,10)   (15,15) 
-			[1]
-			[2]
-			[3]
-			[4]
-
-		*/
-		
-		for (int r = 0; r < foundPoints.size(); r++) {
-			for (int c = 0; c < foundPoints[r].size(); c++) {
-				if (foundPoints[r][c] == Point(-1, -1) && c >= 1) {
-
-				}
-				for (int v = 0; v < validPoints.size(); v++) {
-					// compare foundPoints to validPoints (currPoints vs prevPoints)
-					double dist = getPointdist(foundPoints[r][c], validPoints[v]);
-
-					if (dist <= CarCountDistanceTolerance && dist > 0) {
-						cout << "[" << r << "]" << "[" << c << "] "  << "dist passed " << endl;
-						// fill row with -1,-1 to show it's been cleared
-
-						if (c == foundPoints[r].size() - 1) {
-							for (int z = 0; z < foundPoints[r].size(); z++) {
-								foundPoints[r][z] = Point(-1, -1);
-							}
-							CarsCounted++;
-							cout << " Cars Counted " << CarsCounted << endl;
-						}
-						else {
-							foundPoints[r][c] = validPoints[v];
-						}
-						cout << validPoints[v] << endl;
-
-					}
-				}
-			}
-		}
-
-		prevPoints = currPoints;
-		currPoints.clear();
+		}			
 	}
 	else {
-		prevPoints = a;
+		// fill with new found values to track
+		for (int r = 0; r < foundPoints.size(); r++) {
+			for (int c = 0; c < foundPoints[r].size(); c++) {
+				// see if new value needs to be tracked
+				if (foundPoints[r][0] == neg && vpIndex + 1 < vpSize) {
+					foundPoints[r][0] = validPoints[vpIndex];
+					vpIndex++;
+					cout << foundPoints[r][0] << " " << endl;
+				}
+			}
+		}
+		vpIndex = 0;
+
+
+
 	}
+
+	/*for (int r = 0; r < foundPoints.size(); r++) {
+		for (int c = 0; c < foundPoints[r].size(); c++) {
+			cout << foundPoints[r][c] << " ";
+		}
+		cout << endl;
+	}*/
 
 }
 

@@ -76,8 +76,11 @@ private:
 	vector<Vec4i> hierarchy;
 
 	vector<Point> currPoints, prevPoints;
-	
-	array<array<Point, 10>, 30> foundPoints;
+
+	Point neg = Point(-1, -1);
+
+	array<array<Point, 10>, 30> foundPoints{ {neg} };
+	array<array<Point, 10>, 30> resetPoints{ {neg} };
 
 	Mat img, drawOn, lineMat, blob, bgImg, fgImg;
 	Mat chans[3];
@@ -90,13 +93,13 @@ public:
 	CarDetection::CarDetection() {
 
 		// fill array with -1,-1 to note it's empty
-		Point a = Point(-1, -1);
-
+		/*Point a = Point(-1, -1);
 		for (int i = 0; i < foundPoints.size(); i++) {
 			for (int k = 0; k < foundPoints[i].size(); k++) {
 				foundPoints[i][k] = a;
+				cout << foundPoints[i][k] << endl;
 			}
-		}
+		}*/
 
 		namedWindow(tbCar, WINDOW_NORMAL);
 

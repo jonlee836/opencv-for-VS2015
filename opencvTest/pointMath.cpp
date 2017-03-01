@@ -21,6 +21,28 @@ Point getShapeCenter(vector <Point>& contour) {
 	return objCenter;
 }
 
+bool is2dPointArrayNeg(array<array<Point, 10>, 30 > a) {
+	for (int r = 0; r < a.size(); r++) {
+		for (int c = 0; c < a[r].size(); c++) {
+			a[r][c] = Point(-1, -1);
+		}
+	}
+}
+
+Point reset2dPointArray(array<array<Point, 10>, 30 > a) {
+	for (int r = 0; r < a.size(); r++) {
+		for (int c = 0; c < a[r].size(); c++) {
+			a[r][c] = Point(-1, -1);
+		}
+	}
+}
+
+Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr) {
+	for (int c = 0; c < a.size(); c++) {
+		a[rr][c] = Point(-1, -1);
+	}
+}
+
 double getPointdist(Point& a, Point& b) {
 	return norm(a - b);
 }
