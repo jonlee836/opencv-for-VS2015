@@ -114,8 +114,8 @@ void CarDetection::trackPoints(vector<Point>& a) {
 	int vpIndex = 0;
 	int vpSize = validPoints.size();
 	
-	cout << "validPoints size " << validPoints.size() << " a size " << a.size() << endl;
-	cout << "found points size r and c " << foundPoints.size() << " " << foundPoints[0].size() << endl;
+//	cout << "validPoints size " << validPoints.size() << " a size " << a.size() << endl;
+//	cout << "found points size r and c " << foundPoints.size() << " " << foundPoints[0].size() << endl;
 
 	if (validPoints.empty()) {
 		// reset
@@ -128,26 +128,26 @@ void CarDetection::trackPoints(vector<Point>& a) {
 	}
 	else {
 		// fill with new found values to track
-		for (int r = 0; r < foundPoints.size(); r++) {
-			for (int c = 0; c < foundPoints[r].size(); c++) {
-				// see if new value needs to be tracked
+		for (int v = 0; v < validPoints.size(); v++) {
+			for (int r = 0; r < foundPoints.size(); r++) {
+				for (int c = 0; c < foundPoints[r].size(); c++) {
+					// see if new value needs to be tracked
 
-				// first check if validPoints are found in foundPoints
-				// then add the validPoints that were found but not picked up
-
-				for (int v = 0; v < validPoints.size(); v++) {
-
+					// first check if validPoints are found in foundPoints
+					// then add the validPoints that were found but not picked up
 					double dist = getPointdist(foundPoints[r][c], validPoints[v]);
+
+					cout << "foundPoints " << foundPoints[r][c] << " validPoints " << validPoints[v] << " dist " << dist << endl;
 
 					if (dist <= CarCountDistanceTolerance && c + 1 < foundPoints[r].size()) {
 						foundPoints[r][c + 1] = validPoints[v];
-						np.push_back(vpIndex);
+						np.push_back(v);
 
-						vpIndex++;
+						v++;
 					}
 					else if (dist <= CarCountDistanceTolerance && c + 1 >= foundPoints[r].size()) {
-						np.push_back(vpIndex);
-						vpIndex++;
+						np.push_back(v);
+						v++;
 
 						// clear row
 						for (int z = 0; z < foundPoints[r].size(); z++) {
@@ -155,6 +155,7 @@ void CarDetection::trackPoints(vector<Point>& a) {
 						}
 
 						CarsCounted++;
+						cout << "CARS COUNTED " << CarsCounted << endl;
 
 					}
 					/*if (foundPoints[r][0] == neg && vpIndex + 1 < vpSize) {
@@ -164,39 +165,37 @@ void CarDetection::trackPoints(vector<Point>& a) {
 					}*/
 				}
 			}
-		}
-		
-		if (np.size() < validPoints.size()) {
-
-			vector<int> foo, bitwiseVec;
-
-			for (int i = 0; i < np.size(); i++) {
-				int z = i;
-				foo.push_back(z);
-			}
-
-			for (int a = 0; a < np.size(); a++) {
-				if (np[a] != foo[a]) {
-					int bar = foo[a];
-					bitwiseVec.push_back(bar);
-				}
-			}
-
-			int npIt = 0;
-
-			for (int r = 0; r < foundPoints.size() && npIt < bitwiseVec.size(); r++) {
-				for (int c = 0; c < foundPoints[r].size() && npIt < bitwiseVec.size(); c++) {
-					if (foundPoints[r][0] == neg) {
-						int newPoint2TrackIndex = bitwiseVec[npIt];
-						foundPoints[r][0] = validPoints[newPoint2TrackIndex];
-						npIt++;
-					}
-				}
-			}
-		}
-		vpIndex = 0;
+		}	
 	}
+	if (np.size() < validPoints.size()) {
 
+		vector<int> foo, bitwiseVec;
+
+		for (int i = 0; i < np.size(); i++) {
+			int z = i;
+			foo.push_back(z);
+		}
+
+		for (int a = 0; a < np.size(); a++) {
+			if (np[a] != foo[a]) {
+				int bar = foo[a];
+				bitwiseVec.push_back(bar);
+			}
+		}
+
+		int npIt = 0;
+
+		for (int r = 0; r < foundPoints.size() && npIt < bitwiseVec.size(); r++) {
+			for (int c = 0; c < foundPoints[r].size() && npIt < bitwiseVec.size(); c++) {
+				if (foundPoints[r][0] == neg) {
+					int newPoint2TrackIndex = bitwiseVec[npIt];
+					foundPoints[r][0] = validPoints[newPoint2TrackIndex];
+					npIt++;
+				}
+			}
+		}
+	}
+	vpIndex = 0;
 	/*for (int r = 0; r < foundPoints.size(); r++) {
 		for (int c = 0; c < foundPoints[r].size(); c++) {
 			cout << foundPoints[r][c] << " ";

@@ -161,6 +161,7 @@ public:
 	void carDetect(Mat& a);
 	void findSolidLines(Mat&a);
 	void trackPoints(vector<Point>& foundPoints);
+	void findEmptyPoints
 
 };
 
