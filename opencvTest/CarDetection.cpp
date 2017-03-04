@@ -92,8 +92,8 @@ void CarDetection::carDetect(Mat& a){
 	//cout << " frame : " << frame << " ";
 
 	trackPoints(currPoints, drawOn);
+	
 	findMotionLines();
-
 	findSolidLines(img);
 
 	DOH(showAllWindows, nw_canny, img);
@@ -142,7 +142,7 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 				for (int r = 0; r < fpRow; r++) {
 
 					if (fpIndex[r] >= 0) {
-						cout << "fpIndex[" << r << "] = " << fpIndex[r] << endl;
+
 						// a value of 0 means there's only 1 non-neg in the row
 						int c = fpIndex[r];
 
@@ -189,7 +189,7 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								// Either way you reset the row at foundPoints[r]
 								fpLc[r]++;
 
-								if (fpConfirmed[r] == true) {
+								if (fpConfirmed[r]) {
 
 									if (fpLc[r] >= fpLostMax) {
 
@@ -240,7 +240,13 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 }
 
 void CarDetection::findMotionLines() {
-	
+
+	for (int r = 0; r < fpRow; r++) {
+		if (fpConfirmed[r]) {
+			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
+		}
+	}
+
 }
 
 int CarDetection::findFpNonNegIndex() {
