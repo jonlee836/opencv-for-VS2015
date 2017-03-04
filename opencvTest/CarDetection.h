@@ -79,7 +79,6 @@ private:
 	//-----------------------------------------------------------------------------------------------------------------
 	Vec4i carlines[fpRow];
 
-
 	int ContourRetreivalMode = 0;
 	int ContourApproximationMethods = 2;
 
@@ -202,7 +201,8 @@ public:
 	void carDetect(Mat& a);
 	void findSolidLines(Mat&a);
 	void trackPoints(vector<Point>& foundPoints, Mat& draw);
-	
+	void findMotionLines();
+
 	int findFpNonNegIndex();
 
 	void resetFp();

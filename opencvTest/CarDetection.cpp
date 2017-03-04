@@ -51,10 +51,6 @@ void CarDetection::carDetect(Mat& a){
 
 	DOH(showAllWindows, nw_thresh_before, blob);
 
-	findSolidLines(img);
-
-	DOH(showAllWindows, nw_canny, img);
-
 	RemoveBySize(blob, 500);
 	ErodeDilate(blob, erodeAmount, dilateAmount, 2);
 	findContours(blob, contours, ContourRetreivalMode, CV_CHAIN_APPROX_SIMPLE);
@@ -96,7 +92,11 @@ void CarDetection::carDetect(Mat& a){
 	//cout << " frame : " << frame << " ";
 
 	trackPoints(currPoints, drawOn);
+	findMotionLines();
 
+	findSolidLines(img);
+
+	DOH(showAllWindows, nw_canny, img);
 	//cout << endl;
 
 	currPoints.clear();
@@ -142,7 +142,7 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 				for (int r = 0; r < fpRow; r++) {
 
 					if (fpIndex[r] >= 0) {
-
+						cout << "fpIndex[" << r << "] = " << fpIndex[r] << endl;
 						// a value of 0 means there's only 1 non-neg in the row
 						int c = fpIndex[r];
 
@@ -237,6 +237,10 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 		prevPoints = currPoints;
 		currPoints.clear();
 	}
+}
+
+void CarDetection::findMotionLines() {
+	
 }
 
 int CarDetection::findFpNonNegIndex() {
@@ -416,9 +420,11 @@ void CarDetection::findSolidLines(Mat& a) {
 		
 		if (angle < 0) {angle = abs(angle) + 180;}
 
+		//cout << p1 << " " << p2 << " angle " << angle << endl;
+
 		if ((angle > minD1 && angle < maxD1) || 
-			(angle > minD2 && angle < maxD2))
-		{
+			(angle > minD2 && angle < maxD2)){
+
 			line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
 		}
 	}
