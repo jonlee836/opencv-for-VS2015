@@ -110,15 +110,15 @@ void CarDetection::trackPoints(vector<Point>& a) {
 	currPoints = a;
 
 	int vpSize = validPoints.size();
-	int currSize = currPoints.size();
-	int prevSize = prevPoints.size();
+	int cSize = currPoints.size();
+	int pSize = prevPoints.size();
 
 	if (currPoints.empty() && !prevPoints.empty()) {
 		resetFp();
 		prevPoints.clear();
 		currPoints.clear();
 	}
-	else if (currPoints.empty() && currPoints.empty() || !currPoints.empty() && prevPoints.empty()) {
+	else if ((!currPoints.empty() && prevPoints.empty()) || (currPoints.empty() && prevPoints.empty())) {
 		prevPoints = currPoints;
 	}
 	else if (!currPoints.empty() && !prevPoints.empty()){
@@ -129,41 +129,89 @@ void CarDetection::trackPoints(vector<Point>& a) {
 
 			int total_NN = findFpNonNegIndex();
 
-			if (total_NN < 0) {
-
+			// there are no foundPoints already, fill foundPoints[r][0] with values from validPoints			
+			if (total_NN <= 0) {
+				setFp_with_Vp(validPoints);
 			}
+
+			// there are already foundPoints, compare each vp with fp
 			else {
+
+				// fpIndex[fpRow] holds the last non-neg index position within each row in foundPoint[r][c]
+
 				for (int r = 0; r < fpRow; r++) {
 
-					int fpIndx = fpIndex[r];
+					if (fpIndex[r] >= 0) {
 
-					if (fpIndx >= 0) {
-						if (foundPoints[r][fpIndx] != Point(-1, -1)) {
-							//if (getPointDist())
+						// a value of 0 means there's only 1 non-neg in the row
+
+						int c = fpIndex[r];
+
+						for (int v = 0; v < validPoints.size(); v++) {
+
+							// found point that matches
+							int d = getPointDist(foundPoints[r][c], validPoints[v]);
+
+							if (d <= disTol) {
+
+								// when the final position of foundPoints[r][c] is filled iterate the car counter
+								// and reset the current row
+
+								if (c + 1 == fpCol) {
+									CarsCounted++;
+									resetFpRow(r);
+								}
+								else {
+									foundPoints[r][c + 1] = validPoints[v];
+								}
+
+								// set to -1,-1 to denote validPoint[v] was used up by foundPoints[r][c]
+								validPoints[v] = Point(-1, -1);
+							}							
+							else if (d > disTol && v+1 >= validPoints.size()) {
+								// no point in foundPoints[r] matches any points inside validPoints[vSize]
+								resetFpRow(r);
+							}
 						}
 					}
 				}
+
+				/*
+					whatever points haven't been 
+				*/
+				setFp_with_Vp(validPoints);
 			}
 		}
 		else {
-
+			resetFp();
 		}
+
+		prevPoints = currPoints;
+
 	}
 }
 
 int CarDetection::findFpNonNegIndex() {
 	
-	/*  fp   [0]     [1]      [2]     [3]     [4]
+	/*  
 
-	   [0]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
+	vp
+
+	[0] 53,55
+
+	[1] 99,99
+
+	fp   [0]     [1]      [2]     [3]     [4]
+
+	[0]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
 	   
-	   [1]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
+	[1]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
 
-	   [2]  20,10  -1,-1    -1,-1   -1,-1   -1,-1
+	[2]  20,10  -1,-1    -1,-1   -1,-1   -1,-1
 
-	   [3]  51,52  51,53    -1,-1   -1,-1   -1,-1
+	[3]  51,52  51,53    -1,-1   -1,-1   -1,-1
 
-	   [4]  93,95  94,96    98,99   -1,-1   -1,-1
+	[4]  93,95  94,96    98,99   -1,-1   -1,-1
 	
 	fpIndex
 
@@ -177,11 +225,8 @@ int CarDetection::findFpNonNegIndex() {
 
 	[4] = 3
 
-	for (int r = 0; r < fpRow; r++) {
-		for (int c = 0; c < fpCol; c++) {
 
-		}
-	}
+
 
 	*/
 
@@ -217,6 +262,14 @@ void CarDetection::findVp(vector<Point>& vp) {
 
 void CarDetection::setFp_with_Vp(vector<Point>& vp) {
 
+	int vit = 0;
+
+	for (int r = 0; r < fpRow && vit < vp.size(); r++) {		
+		if (vp[vit] != Point(-1, -1)) {
+			foundPoints[r][0] = vp[vit];
+		}		
+		vit++;
+	}
 }
 
 void CarDetection::resetFp() {
