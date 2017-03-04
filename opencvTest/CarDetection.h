@@ -40,7 +40,9 @@ private:
 	// max distance between points, between frames
 	
 	static const int disTol = 35;
-	static const int fpLostMin = 2;
+
+	static const int fpLost_minIndex = 4;
+	static const int fpLostMin = 3;
 	static const int fpLostMax = 5;
 
 	static const int fpRow = 30; 	// fpRow max amount of points it can track at a time
@@ -90,7 +92,7 @@ private:
 
 	int linesRho = 1;
 	int linesTheta = 180;
-	int linesThresh = 40;
+	int linesThresh = 160;
 	int linesMinLength = 40;
 	int linesMaxGap = 360;
 

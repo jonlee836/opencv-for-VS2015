@@ -24,13 +24,16 @@ void CarDetection::carDetect(Mat& a){
 
 	DOH(showAllWindows, nw_blur, img);
 
-	/*const string tbCar = "car detect trackbar";
+	/*
+	
+	const string tbCar = "car detect trackbar";
 
 	const string nw_cardetect = "car detect";
 	const string nw_blur = "blur";
 	const string nw_thresh_before = "thresh blobs";
 	const string nw_canny = "canny lines";
-		*/
+	
+	*/
 	
 	if (fgImg.empty()) {
 		fgImg.create(img.size(), img.type());
@@ -90,26 +93,20 @@ void CarDetection::carDetect(Mat& a){
 		circle(drawOn, center, 2, Scalar(0, 255, 0), 2, 8, 0);
 	}
 
-	cout << " frame : " << frame << " ";
+	//cout << " frame : " << frame << " ";
 
 	trackPoints(currPoints, drawOn);
 
-	cout << endl;
+	//cout << endl;
 
 	currPoints.clear();
+	frame++;
 
 	imshow(nw_cardetect, drawOn);
 }
 
 void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 
-	// because this can get a bit complicated,
-	// do not try to make code more efficient
-	// if it makes the code less readable!
-
-	int vpIndex = 0;
-
-	vector <int> np;
 	vector <Point> validPoints;
 
 	currPoints = a;
@@ -119,7 +116,6 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 	int pSize = prevPoints.size();
 
 	if (currPoints.empty() && !prevPoints.empty()) {
-		resetFp();
 		prevPoints.clear();
 		currPoints.clear();
 	}
@@ -143,13 +139,11 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 			else {
 
 				// fpIndex[fpRow] holds the last non-neg index position within each row in foundPoint[r][c]
-
 				for (int r = 0; r < fpRow; r++) {
 
 					if (fpIndex[r] >= 0) {
 
 						// a value of 0 means there's only 1 non-neg in the row
-
 						int c = fpIndex[r];
 
 						for (int v = 0; v < validPoints.size(); v++) {
@@ -158,18 +152,19 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 							int dist = getPointDist(foundPoints[r][c], validPoints[v]);
 
 							if (dist <= disTol) {
-								cout << dist << " < " << disTol << endl;
 
 								// when the final position of foundPoints[r][c] is filled iterate the car counter
 								// and reset the current row
 								//circle(draw, foundPoints[r][c], 2, Scalar(0, 255, 0), 5, 8, 0);
+								fpLc[r] = 0;
 
-								if (c + 1 >= fpCol) {					
-									
+								if (c + 1 >= fpCol) {
+
 									resetFpRow(r);
-									fpConfirmed[r] = true; 	// points start writing over itself
+
 									foundPoints[r][0] = validPoints[v];
 									fpLastKnown[r] = validPoints[v];
+									fpConfirmed[r] = true; 	// points start writing over itself
 
 									//circle(draw, fpLastKnown[r], 2, Scalar(0, 255, 0), 5, 8, 0);
 									//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
@@ -183,50 +178,62 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								validPoints[v] = Point(-1, -1);
 
 								break;
-								
-							}							
+
+							}
 							else if (dist > disTol && v + 1 >= validPoints.size()) {
 
 								// If fpIndex[r] is the same size as fpCol that means the car is 
 								// confirmed and it's safe to stop tracking.
 								// Either way you reset the row at foundPoints[r]
-							
+								fpLc[r]++;
+
 								if (fpConfirmed[r] == true) {
-									fpLc[r]++;
 
-									if (fpConfirmed[r] == true && fpLc[r] >= fpLostMax) {
-																			
-										fpLc[r] = 0;
+									if (fpLc[r] >= fpLostMax) {
 
-										cout << "dist = " << dist << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
-										cout << "dist = " << dist << " drawing at fpLastKnown[" << r << "] = " << fpLastKnown[r] << endl;
-										cout << "cars counted : " << CarsCounted;
-
-										circle(draw, fpLastKnown[r], 2, Scalar(0, 0, 255), 8, 8, 0);
-
-										fpConfirmed[r] = false;
-										fpLastKnown[r] = Point(-1, -1);
-
-										CarsCounted++;
+										//cout << "dist = " << dist << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
+										//cout << "dist = " << dist << " drawing at fpLastKnown[" << r << "] = " << fpLastKnown[r] << endl;
 										
+										CarsCounted++;
+										cout << "cars counted : " << CarsCounted << endl;
+
+										circle(draw, fpLastKnown[r], 2, Scalar(0, 0, 255), 8, 8, 0);										
 										resetFpRow(r);
-									}																									
+									}
 								}
+								else if (fpLc[r] >= fpLostMin && fpIndex[r] < fpLost_minIndex) {
+									resetFpRow(r);
+								}
+
 							}
 						}
-					}
-				}			
-				//foundPoints[r][0] = validPoints[v] that haven't been set to -1,-1 because they passed the getPointDist test 				
+					}					
+				}				
+				// remaining validPoints[v] that haven't been set to -1,-1 are put in foundPoints[r][0]
 				setFp_with_Vp(validPoints);
-			}
+			}		
 		}
 		else {
-			resetFp();
+
+			// conditions for reseting a row in foundPoints[r]				
+			for (int r = 0; r < fpRow; r++) {
+
+				// if the row in foundPoint hasn't been confirmed aka 7 hits
+				if (!fpConfirmed[r]) {
+
+					// if it has been lost for fpLastMin number of frames and detected less than 5 frames in a row
+					if (fpLc[r] >= fpLostMin && fpIndex[r] < fpLost_minIndex) {
+						resetFpRow(r);
+					}
+					else {
+						fpLc[r]++;
+					}
+				}				
+			}
 		}
 
 		prevPoints = currPoints;
 		currPoints.clear();
-
 	}
 }
 
@@ -357,7 +364,8 @@ void CarDetection::resetFp() {
 		}
 		fpLc[r] = 0;
 		fpIndex[r] = -1;
-		fpConfirmed[r] = false;
+		fpConfirmed[r] = false; 
+		fpLastKnown[r] = Point(-1, -1);		
 	}
 }
 
@@ -365,6 +373,10 @@ void CarDetection::resetFpRow(int r) {
 	for (int c = 0; c < fpCol; c++) {
 		foundPoints[r][c] = neg;
 	}
+	fpLc[r] = 0;
+	fpIndex[r] = -1;
+	fpConfirmed[r] = false;
+	fpLastKnown[r] = Point(-1, -1);
 }
 
 void CarDetection::findSolidLines(Mat& a) {
@@ -408,7 +420,6 @@ void CarDetection::findSolidLines(Mat& a) {
 		}
 		
 	}
-	frame++;
 }
 
 Mat CarDetection::getThreshold() {
