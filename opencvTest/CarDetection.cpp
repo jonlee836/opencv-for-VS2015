@@ -401,7 +401,6 @@ void CarDetection::findSolidLines(Mat& a) {
 	Canny(a, a, cannyThresh1, cannyThresh2);
 
 	vector<Vec4i> linesHlp;
-	linesHlp.resize(10);
 
 	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
 
@@ -417,12 +416,14 @@ void CarDetection::findSolidLines(Mat& a) {
 		
 		if (angle < 0) {angle = abs(angle) + 180;}
 
-		if ((angle > minD1 && angle < maxD1) || (angle > minD2 && angle < maxD2)){
+		if ((angle > minD1 && angle < maxD1) || 
+			(angle > minD2 && angle < maxD2))
+		{
 			line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
-		}		
+		}
 	}
 
-	cout << "number of lines found " << linesHlp.size() << endl;
+
 }
 
 Mat CarDetection::getThreshold() {

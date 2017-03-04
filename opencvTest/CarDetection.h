@@ -75,9 +75,11 @@ private:
 
 	Point neg = Point(-1, -1);
 	int CarsCounted = 0;
-
-	//-----------------------------------------------------------------------------------------------------------------
 	
+	//-----------------------------------------------------------------------------------------------------------------
+	Vec4i carlines[fpRow];
+
+
 	int ContourRetreivalMode = 0;
 	int ContourApproximationMethods = 2;
 
@@ -100,11 +102,15 @@ private:
 	int cannyThresh1 = 50;
 	int cannyThresh2 = 150;
 
-	int minD1 = 60; int maxD1 = 360;
-	int minD2 = 240; int maxD2 = 300;
+	int minD1 = 60;
+	int maxD1 = 360;
+
+	int minD2 = 240;
+	int maxD2 = 300;
 
 	const double getR = CV_PI / 180;
 	const double getD = 180 / CV_PI;
+
 	const int DEGREES = 360;
 
 	vector<vector<Point> > contours;
