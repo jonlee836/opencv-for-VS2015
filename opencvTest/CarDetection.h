@@ -39,7 +39,7 @@ private:
 
 	// fpRow max amount of points it can track at a time
 	static const int fpRow = 30;
-	static const int fpCol = 7;
+	static const int fpCol = 7; // points tracked
 	
 	int fpIndex[fpRow];
 
@@ -59,8 +59,7 @@ private:
 	//array<array<Point, 10>, 30> resetPoints{ { neg } };
 	//array<Point, 10> resetRow{ neg };
 
-	const int maxNumbShapes = 20;
-	const int disTol = 40;
+	const int disTol = 10;
 	const int CarMaxCount = 7; // car moved 7 frames in a row
 
 	int CarsCounted = 0;

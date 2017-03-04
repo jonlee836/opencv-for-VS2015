@@ -87,7 +87,7 @@ void CarDetection::carDetect(Mat& a){
 		Point center = getShapeCenter(contours[i]);
 		currPoints.push_back(center);
 
-		circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
+		//circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
 	}
 
 	trackPoints(currPoints, drawOn);
@@ -159,16 +159,20 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 
 								if (c + 1 == fpCol) {
 									CarsCounted++;
-									cout << "cars counted : " << CarsCounted << endl;
 									resetFpRow(r);
+									validPoints[v] = Point(-1, -1);
+
+									cout << "cars counted : " << CarsCounted << endl;
 								}
 								else {
 									foundPoints[r][c + 1] = validPoints[v];
-								}
+									validPoints[v] = Point(-1, -1);
 
+									circle(draw, foundPoints[r][c], 2, Scalar(100, 255, 0), 2, 8, 0);
+								}
+								break;
 								// set to -1,-1 to denote validPoint[v] was used up by foundPoints[r][c]
-								circle(draw, foundPoints[r][c], 2, Scalar(100, 255, 0), 2, 8, 0);
-								validPoints[v] = Point(-1, -1);
+								
 							}							
 							else if (d > disTol && v + 1 >= validPoints.size()) {
 								// no point in foundPoints[r] matches any points inside validPoints[vSize]
