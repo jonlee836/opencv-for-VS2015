@@ -115,8 +115,17 @@ private:
 public:
 
 	CarDetection::CarDetection() {
-
-		resetFp();
+		
+		for (int r = 0; r < fpRow; r++) {
+			for (int c = 0; c < fpCol; c++) {
+				foundPoints[r][c] = Point(-1, -1);
+			}
+			fpLc[r] = 0;
+			fpIndex[r] = -1;
+			fpConfirmed[r] = false;
+			fpLastKnown[r] = Point(-1, -1);
+		}
+		//resetFp();
 		// fill array with -1,-1 to note it's empty
 		/*Point a = Point(-1, -1);
 		for (int i = 0; i < foundPoints.size(); i++) {

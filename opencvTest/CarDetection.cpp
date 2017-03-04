@@ -151,7 +151,6 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 						// a value of 0 means there's only 1 non-neg in the row
 
 						int c = fpIndex[r];
-						// cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
 
 						for (int v = 0; v < validPoints.size(); v++) {
 
@@ -173,16 +172,12 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 									fpLastKnown[r] = validPoints[v];
 
 									//circle(draw, fpLastKnown[r], 2, Scalar(0, 255, 0), 5, 8, 0);
-
-									cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
-									cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << " " << endl;
+									//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
+									//cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << " " << endl;
 								}
 								else {
 									foundPoints[r][c + 1] = validPoints[v];
 									fpLastKnown[r] = validPoints[v];
-
-									//circle(draw, fpLastKnown[r], 2, Scalar(0, 255, 0), 5, 8, 0);
-
 								}
 								// set to -1,-1 to denote validPoint[v] was used up by foundPoints[r][c]
 								validPoints[v] = Point(-1, -1);
@@ -201,7 +196,6 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 
 									if (fpConfirmed[r] == true && fpLc[r] >= fpLostMax) {
 																			
-										//circle(draw, foundPoints[r][c], 2, Scalar(0, 0, 255), 8, 8, 0);
 										fpLc[r] = 0;
 
 										cout << "dist = " << dist << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
