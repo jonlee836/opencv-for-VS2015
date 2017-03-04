@@ -98,110 +98,44 @@ void CarDetection::carDetect(Mat& a){
 
 void CarDetection::trackPoints(vector<Point>& a) {
 
-	/*
-		cout << endl;
-		cout << "at frame " << frame << endl;
-		cout << c << " curr point " << currPoints[c] << endl;
-		cout << "    " << p << " prev point " << prevPoints[p] << " distance = " << dist << endl;
-	*/
-	cout << "at frame " << frame << endl;
-
-	vector <Point> validPoints;
-	vector <int> np;
-	
-	validPoints = a;
+	// because this can get a bit complicated,
+	// do not try to make code more efficient
+	// if it makes the code less readable!
 
 	int vpIndex = 0;
-	int vpSize = validPoints.size();
-	
-//	cout << "validPoints size " << validPoints.size() << " a size " << a.size() << endl;
-//	cout << "found points size r and c " << foundPoints.size() << " " << foundPoints[0].size() << endl;
 
-	if (validPoints.empty()) {
-		// reset
-		cout << " validPoints.empty() " << endl;
-		for (int r = 0; r < foundPoints.size(); r++) {
-			for (int z = 0; z < foundPoints[r].size(); z++) {
-				foundPoints[r][z] = neg;
-			}
-		}			
+	vector <int> np;
+	vector <Point> validPoints;
+
+	currPoints = a;
+
+	int vpSize = validPoints.size();
+	int currSize = currPoints.size();
+	int prevSize = prevPoints.size();
+
+	if (currPoints.empty() && !prevPoints.empty()) {
+		resetFp();
+		prevPoints.clear();
+		currPoints.clear();
+	}
+	else if (currPoints.empty() && currPoints.empty()) {
+		prevPoints = currPoints;
 	}
 	else {
-		// fill with new found values to track
-		for (int v = 0; v < validPoints.size(); v++) {
-			for (int r = 0; r < foundPoints.size(); r++) {
-				for (int c = 0; c < foundPoints[r].size(); c++) {
-					// see if new value needs to be tracked
 
-					// first check if validPoints are found in foundPoints
-					// then add the validPoints that were found but not picked up
-					double dist = getPointdist(foundPoints[r][c], validPoints[v]);
-
-					cout << "foundPoints " << foundPoints[r][c] << " validPoints " << validPoints[v] << " dist " << dist << endl;
-
-					if (dist <= CarCountDistanceTolerance && c + 1 < foundPoints[r].size()) {
-						foundPoints[r][c + 1] = validPoints[v];
-						np.push_back(v);
-
-						v++;
-					}
-					else if (dist <= CarCountDistanceTolerance && c + 1 >= foundPoints[r].size()) {
-						np.push_back(v);
-						v++;
-
-						// clear row
-						for (int z = 0; z < foundPoints[r].size(); z++) {
-							foundPoints[r][z] = neg;
-						}
-
-						CarsCounted++;
-						cout << "CARS COUNTED " << CarsCounted << endl;
-
-					}
-					/*if (foundPoints[r][0] == neg && vpIndex + 1 < vpSize) {
-						foundPoints[r][0] = validPoints[vpIndex];
-						vpIndex++;
-						cout << foundPoints[r][0] << " " << endl;
-					}*/
-				}
-			}
-		}	
 	}
-	if (np.size() < validPoints.size()) {
 
-		vector<int> foo, bitwiseVec;
+}
 
-		for (int i = 0; i < np.size(); i++) {
-			int z = i;
-			foo.push_back(z);
-		}
-
-		for (int a = 0; a < np.size(); a++) {
-			if (np[a] != foo[a]) {
-				int bar = foo[a];
-				bitwiseVec.push_back(bar);
-			}
-		}
-
-		int npIt = 0;
-
-		for (int r = 0; r < foundPoints.size() && npIt < bitwiseVec.size(); r++) {
-			for (int c = 0; c < foundPoints[r].size() && npIt < bitwiseVec.size(); c++) {
-				if (foundPoints[r][0] == neg) {
-					int newPoint2TrackIndex = bitwiseVec[npIt];
-					foundPoints[r][0] = validPoints[newPoint2TrackIndex];
-					npIt++;
-				}
-			}
+void CarDetection::resetFp() {
+	for (int r = 0; r < fpRow; r++) {
+		for (int c = 0; c < fpCol; c++) {
+			foundPoints[r][c] = neg;
 		}
 	}
-	vpIndex = 0;
-	/*for (int r = 0; r < foundPoints.size(); r++) {
-		for (int c = 0; c < foundPoints[r].size(); c++) {
-			cout << foundPoints[r][c] << " ";
-		}
-		cout << endl;
-	}*/
+}
+
+void CarDetection::findVp(vector<Point> vp) {
 
 }
 

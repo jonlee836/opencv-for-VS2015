@@ -37,6 +37,21 @@ private:
 	int showAll = 0;
 	int frame = 0;
 
+	// fpRow max amount of points it can track at a time
+	static const int fpRow = 30;
+	static const int fpCol = 7;
+
+	Point foundPoints[fpRow][fpCol];
+	Point validPoints[30];
+
+	vector<Point> currPoints, prevPoints;
+
+	Point neg = Point(-1, -1);
+
+	//array<array<Point, 10>, 30> foundPoints{ { neg } };
+	//array<array<Point, 10>, 30> resetPoints{ { neg } };
+	//array<Point, 10> resetRow{ neg };
+
 	const int maxNumbShapes = 20;
 	const int CarCountDistanceTolerance = 40;
 	const int CarMaxCount = 7; // car moved 7 frames in a row
@@ -75,19 +90,9 @@ private:
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
-	vector<Point> currPoints, prevPoints;
-
-	Point neg = Point(-1, -1);
-
-	array<array<Point, 10>, 30> foundPoints{ {neg} };
-	array<array<Point, 10>, 30> resetPoints{ {neg} };
-	array<Point, 10> resetRow{ neg };
-
-
 	Mat img, drawOn, lineMat, blob, bgImg, fgImg;
 	Mat chans[3];
 
-	Point pointArray[10];
 	Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorMOG2(50);
 
 public:
@@ -160,8 +165,12 @@ public:
 
 	void carDetect(Mat& a);
 	void findSolidLines(Mat&a);
+
 	void trackPoints(vector<Point>& foundPoints);
-	void findEmptyPoints
+	
+	void resetFp();
+	void resetFpRow(int r);
+	void findVp(vector<Point> vp);
 
 };
 
