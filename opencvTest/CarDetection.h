@@ -173,13 +173,12 @@ public:
 
 	void carDetect(Mat& a);
 	void findSolidLines(Mat&a);
-
-	void trackPoints(vector<Point>& foundPoints);
+	void trackPoints(vector<Point>& foundPoints, Mat& draw);
 	
 	int findFpNonNegIndex();
+
 	void resetFp();
 	void resetFpRow(int r);
-
 	void setFp_with_Vp(vector<Point>& vp);
 	void findVp(vector<Point>& vp);
 	

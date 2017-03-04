@@ -90,13 +90,13 @@ void CarDetection::carDetect(Mat& a){
 		circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
 	}
 
-	trackPoints(currPoints);
+	trackPoints(currPoints, drawOn);
 	currPoints.clear();
 
 	imshow(nw_cardetect, drawOn);
 }
 
-void CarDetection::trackPoints(vector<Point>& a) {
+void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 
 	// because this can get a bit complicated,
 	// do not try to make code more efficient
@@ -159,6 +159,7 @@ void CarDetection::trackPoints(vector<Point>& a) {
 
 								if (c + 1 == fpCol) {
 									CarsCounted++;
+									cout << "cars counted : " << CarsCounted << endl;
 									resetFpRow(r);
 								}
 								else {
@@ -166,19 +167,17 @@ void CarDetection::trackPoints(vector<Point>& a) {
 								}
 
 								// set to -1,-1 to denote validPoint[v] was used up by foundPoints[r][c]
+								circle(draw, foundPoints[r][c], 2, Scalar(100, 255, 0), 2, 8, 0);
 								validPoints[v] = Point(-1, -1);
 							}							
-							else if (d > disTol && v+1 >= validPoints.size()) {
+							else if (d > disTol && v + 1 >= validPoints.size()) {
 								// no point in foundPoints[r] matches any points inside validPoints[vSize]
 								resetFpRow(r);
 							}
 						}
 					}
-				}
-
-				/*
-					whatever points haven't been 
-				*/
+				}			
+				//foundPoints[r][0] = validPoints[v] that haven't been set to -1,-1 because they passed the getPointDist test 				
 				setFp_with_Vp(validPoints);
 			}
 		}
@@ -187,6 +186,7 @@ void CarDetection::trackPoints(vector<Point>& a) {
 		}
 
 		prevPoints = currPoints;
+		currPoints.clear();
 
 	}
 }
@@ -195,17 +195,25 @@ int CarDetection::findFpNonNegIndex() {
 	
 	/*  
 
-	vp
+	example
+
+	validPoints
 
 	[0] 53,55
 
 	[1] 99,99
 
-	fp   [0]     [1]      [2]     [3]     [4]
+	[2] 10,10
 
-	[0]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
+	--------------------------------------------
+
+	foundPoints
+
+	     [0]     [1]      [2]     [3]     [4]
+
+	[0]  88,88  -1,-1    -1,-1   -1,-1   -1,-1
 	   
-	[1]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
+	[1]  77,77  -1,-1    -1,-1   -1,-1   -1,-1
 
 	[2]  20,10  -1,-1    -1,-1   -1,-1   -1,-1
 
@@ -213,6 +221,9 @@ int CarDetection::findFpNonNegIndex() {
 
 	[4]  93,95  94,96    98,99   -1,-1   -1,-1
 	
+
+	-------------------------------------------
+
 	fpIndex
 
 	[0] = -1
@@ -224,23 +235,51 @@ int CarDetection::findFpNonNegIndex() {
 	[3] = 1
 
 	[4] = 3
+	
 
+	Example Output
 
+	fpIndex[3] = 1
 
+	int c = fpIndex[3]
+
+	validPoints[0] = 53,55
+	foundPoints[3][c] = 51,53
+
+	therefore
+
+	foundPoints[3][2] would be set to validPoints[0]
+	foundPoints[4][3] would be set to validPoints[1]
+
+	foundPoints rows 0,1,2 are set to Point(-1,-1)	
+
+	validPoints[0] are set to Point(-1,-1)
+	validPoints[1] are set to Point(-1,-1)
+
+	----------------------------------------
+
+	validPoints[2] is therefore a new point to track
+
+	The first element in foundpoints[r][0] that equals Point(-1,-1)
+	is set to validPoints[2]
 
 	*/
 
-	bool hasNonNeg = false;
 	int total = 0;
 
-	for (int r = 0; r < fpRow; r++) {
+	for (int r = 0; r < fpRow; r++) {		
+		
+		bool hasNonNeg = false;		
+		int index = -1;
+
 		for (int c = 0; c < fpCol && foundPoints[r][c] != Point(-1,-1); c++) {
-			fpIndex[r] = c;
+			index = c;
 			hasNonNeg = true;
 		}
+
 		if (hasNonNeg == true) {
+			fpIndex[r] = index;
 			total++;
-			hasNonNeg = false;
 		}
 	}
 
