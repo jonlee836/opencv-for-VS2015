@@ -37,8 +37,9 @@ private:
 	int showAll = 0;
 	int frame = 0;
 
+	// point counter --------------------------------------------------------------------------------------------------
+
 	// max distance between points, between frames
-	
 	static const int disTol = 35;
 
 	static const int fpLost_minIndex = 4;
@@ -62,7 +63,6 @@ private:
 	*/
 	
 	int fpLc[fpRow];
-
 	/*
 		If fpLc[fpRow] prevents (hopefully) the tracker from getting confused if it loses a target for a few frames
 	*/
@@ -74,8 +74,9 @@ private:
 	vector<Point> currPoints, prevPoints;
 
 	Point neg = Point(-1, -1);
-	
 	int CarsCounted = 0;
+
+	//-----------------------------------------------------------------------------------------------------------------
 	
 	int ContourRetreivalMode = 0;
 	int ContourApproximationMethods = 2;

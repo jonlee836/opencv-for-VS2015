@@ -158,13 +158,15 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								//circle(draw, foundPoints[r][c], 2, Scalar(0, 255, 0), 5, 8, 0);
 								fpLc[r] = 0;
 
+
 								if (c + 1 >= fpCol) {
 
+									// foundPoints start writing over itself
 									resetFpRow(r);
 
 									foundPoints[r][0] = validPoints[v];
 									fpLastKnown[r] = validPoints[v];
-									fpConfirmed[r] = true; 	// points start writing over itself
+									fpConfirmed[r] = true; 	
 
 									//circle(draw, fpLastKnown[r], 2, Scalar(0, 255, 0), 5, 8, 0);
 									//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
@@ -315,8 +317,8 @@ int CarDetection::findFpNonNegIndex() {
 
 	for (int r = 0; r < fpRow; r++) {		
 		
-		bool hasNonNeg = false;		
 		int index = -1;
+		bool hasNonNeg = false;		
 
 		for (int c = 0; c < fpCol && foundPoints[r][c] != Point(-1,-1); c++) {
 			index = c;
@@ -417,9 +419,10 @@ void CarDetection::findSolidLines(Mat& a) {
 
 		if ((angle > minD1 && angle < maxD1) || (angle > minD2 && angle < maxD2)){
 			line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
-		}
-		
+		}		
 	}
+
+	cout << "number of lines found " << linesHlp.size() << endl;
 }
 
 Mat CarDetection::getThreshold() {
