@@ -87,7 +87,7 @@ void CarDetection::carDetect(Mat& a){
 		Point center = getShapeCenter(contours[i]);
 		currPoints.push_back(center);
 
-		//circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
+		circle(drawOn, center, 2, Scalar(100, 255, 0), 2, 8, 0);
 	}
 
 	trackPoints(currPoints, drawOn);
@@ -150,38 +150,37 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 						for (int v = 0; v < validPoints.size(); v++) {
 
 							// found point that matches
-							int d = getPointDist(foundPoints[r][c], validPoints[v]);
+							int dist = getPointDist(foundPoints[r][c], validPoints[v]);
 
-							if (d <= disTol) {
+							if (fpConfirmed[r] == true) {
+								circle(draw, foundPoints[r][c], 2, Scalar(0, 0, 255), 8, 8, 0);
+								
+								cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c];
+								cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << endl;
+							}
+
+							if (dist <= disTol) {
 
 								// when the final position of foundPoints[r][c] is filled iterate the car counter
 								// and reset the current row
 
-								if (c + 1 >= fpCol) {									
-									
-									circle(draw, foundPoints[r][c], 2, Scalar(100, 255, 0), 8, 8, 0);
-
-									// points start writing over itself							
+								if (c + 1 >= fpCol) {						
 									//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c];
 									//cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << endl;
-
 									resetFpRow(r);
-
-									fpConfirmed[r] = true;
+									fpConfirmed[r] = true; 	// points start writing over itself
 									foundPoints[r][0] = validPoints[v];
-									validPoints[v] = Point(-1, -1);
-
 								}
 								else {
 									foundPoints[r][c + 1] = validPoints[v];
-									validPoints[v] = Point(-1, -1);
-
 								}
-								break;
 								// set to -1,-1 to denote validPoint[v] was used up by foundPoints[r][c]
+								validPoints[v] = Point(-1, -1);
+								
+								break;
 								
 							}							
-							else if (d > disTol && v + 1 >= validPoints.size()) {								
+							else if (dist > disTol && v + 1 >= validPoints.size()) {
 
 								// If fpIndex[r] is the same size as fpCol that means the car is 
 								// confirmed and it's safe to stop tracking.
