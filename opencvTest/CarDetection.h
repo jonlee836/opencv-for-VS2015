@@ -39,14 +39,14 @@ private:
 
 	// max distance between points, between frames
 	
-	static const int disTol = 25;
+	static const int disTol = 35;
 	static const int fpLostMin = 2;
 	static const int fpLostMax = 5;
 
 	static const int fpRow = 30; 	// fpRow max amount of points it can track at a time
 	static const int fpCol = 7; // points tracked
 	
-	bool fpConfirmed[fpRow];	
+	bool fpConfirmed[fpRow];
 	/*
 		keeps track of whether or not foundPoints has written over itself because it reached the point limit aka fpCol
 	*/
@@ -65,6 +65,7 @@ private:
 		If fpLc[fpRow] prevents (hopefully) the tracker from getting confused if it loses a target for a few frames
 	*/
 
+	Point fpLastKnown[fpRow];
 	Point foundPoints[fpRow][fpCol];
 	Point validPoints[fpRow];
 

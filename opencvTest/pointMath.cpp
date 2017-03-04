@@ -36,5 +36,7 @@ Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr) {
 }
 
 double getPointDist(Point& a, Point& b) {
-	return norm(a - b);
+	double distance = norm(a - b);
+
+	return distance;
 }
