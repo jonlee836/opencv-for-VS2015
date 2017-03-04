@@ -37,16 +37,33 @@ private:
 	int showAll = 0;
 	int frame = 0;
 
-	// fpRow max amount of points it can track at a time
-	static const int fpRow = 30;
+	// max distance between points, between frames
+	
+	static const int disTol = 25;
+	static const int fpLostMin = 2;
+	static const int fpLostMax = 5;
+
+	static const int fpRow = 30; 	// fpRow max amount of points it can track at a time
 	static const int fpCol = 7; // points tracked
 	
-	int fpIndex[fpRow];
+	bool fpConfirmed[fpRow];	
+	/*
+		keeps track of whether or not foundPoints has written over itself because it reached the point limit aka fpCol
+	*/
 
-	// if foundPoints[fpRow][0] is non-neg aka Point(-1,-1)
-	// fpIndex keeps track of the next non-neg
-	// therefore fpIndex[5] = 2 
-	// means foundPoints[5][0] through foundPoints[5][2] is non neg
+	int fpIndex[fpRow];
+	/*
+		if foundPoints[fpRow][0] is non-neg aka Point(-1,-1)
+		fpIndex keeps track of the next non-neg
+		therefore fpIndex[5] = 2 
+		means foundPoints[5][0] through foundPoints[5][2] is non neg
+	*/
+	
+	int fpLc[fpRow];
+
+	/*
+		If fpLc[fpRow] prevents (hopefully) the tracker from getting confused if it loses a target for a few frames
+	*/
 
 	Point foundPoints[fpRow][fpCol];
 	Point validPoints[fpRow];
@@ -54,14 +71,7 @@ private:
 	vector<Point> currPoints, prevPoints;
 
 	Point neg = Point(-1, -1);
-
-	//array<array<Point, 10>, 30> foundPoints{ { neg } };
-	//array<array<Point, 10>, 30> resetPoints{ { neg } };
-	//array<Point, 10> resetRow{ neg };
-
-	const int disTol = 10;
-	const int CarMaxCount = 7; // car moved 7 frames in a row
-
+	
 	int CarsCounted = 0;
 	
 	int ContourRetreivalMode = 0;

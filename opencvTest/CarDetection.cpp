@@ -157,25 +157,47 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								// when the final position of foundPoints[r][c] is filled iterate the car counter
 								// and reset the current row
 
-								if (c + 1 == fpCol) {
-									CarsCounted++;
+								if (c + 1 >= fpCol) {									
+									
+									circle(draw, foundPoints[r][c], 2, Scalar(100, 255, 0), 8, 8, 0);
+
+									// points start writing over itself							
+									//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c];
+									//cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << endl;
+
 									resetFpRow(r);
+
+									fpConfirmed[r] = true;
+									foundPoints[r][0] = validPoints[v];
 									validPoints[v] = Point(-1, -1);
 
-									cout << "cars counted : " << CarsCounted << endl;
 								}
 								else {
 									foundPoints[r][c + 1] = validPoints[v];
 									validPoints[v] = Point(-1, -1);
 
-									circle(draw, foundPoints[r][c], 2, Scalar(100, 255, 0), 2, 8, 0);
 								}
 								break;
 								// set to -1,-1 to denote validPoint[v] was used up by foundPoints[r][c]
 								
 							}							
-							else if (d > disTol && v + 1 >= validPoints.size()) {
-								// no point in foundPoints[r] matches any points inside validPoints[vSize]
+							else if (d > disTol && v + 1 >= validPoints.size()) {								
+
+								// If fpIndex[r] is the same size as fpCol that means the car is 
+								// confirmed and it's safe to stop tracking.
+								// Either way you reset the row at foundPoints[r]
+							
+								if (fpConfirmed[r] == true) {
+									fpLc[r]++;
+
+									if (fpLc[r] >= fpLostMax) {
+										fpLc[r] = 0;
+										CarsCounted++;
+										fpConfirmed[r] = false;
+										
+										cout << "cars counted : " << CarsCounted << endl;
+									}																										
+								}
 								resetFpRow(r);
 							}
 						}
@@ -320,7 +342,9 @@ void CarDetection::resetFp() {
 		for (int c = 0; c < fpCol; c++) {
 			foundPoints[r][c] = Point(-1,-1);
 		}
+		fpLc[r] = 0;
 		fpIndex[r] = -1;
+		fpConfirmed[r] = false;
 	}
 }
 
