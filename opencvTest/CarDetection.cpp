@@ -118,25 +118,120 @@ void CarDetection::trackPoints(vector<Point>& a) {
 		prevPoints.clear();
 		currPoints.clear();
 	}
-	else if (currPoints.empty() && currPoints.empty()) {
+	else if (currPoints.empty() && currPoints.empty() || !currPoints.empty() && prevPoints.empty()) {
 		prevPoints = currPoints;
 	}
-	else {
+	else if (!currPoints.empty() && !prevPoints.empty()){
 
+		findVp(validPoints);
+
+		if (!validPoints.empty()) {
+
+			int total_NN = findFpNonNegIndex();
+
+			if (total_NN < 0) {
+
+			}
+			else {
+				for (int r = 0; r < fpRow; r++) {
+
+					int fpIndx = fpIndex[r];
+
+					if (fpIndx >= 0) {
+						if (foundPoints[r][fpIndx] != Point(-1, -1)) {
+							//if (getPointDist())
+						}
+					}
+				}
+			}
+		}
+		else {
+
+		}
 	}
+}
+
+int CarDetection::findFpNonNegIndex() {
+	
+	/*  fp   [0]     [1]      [2]     [3]     [4]
+
+	   [0]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
+	   
+	   [1]  -1,-1   -1,-1    -1,-1   -1,-1   -1,-1
+
+	   [2]  20,10  -1,-1    -1,-1   -1,-1   -1,-1
+
+	   [3]  51,52  51,53    -1,-1   -1,-1   -1,-1
+
+	   [4]  93,95  94,96    98,99   -1,-1   -1,-1
+	
+	fpIndex
+
+	[0] = -1
+
+	[1] = -1
+
+	[2] = 0
+
+	[3] = 1
+
+	[4] = 3
+
+	for (int r = 0; r < fpRow; r++) {
+		for (int c = 0; c < fpCol; c++) {
+
+		}
+	}
+
+	*/
+
+	bool hasNonNeg = false;
+	int total = 0;
+
+	for (int r = 0; r < fpRow; r++) {
+		for (int c = 0; c < fpCol && foundPoints[r][c] != Point(-1,-1); c++) {
+			fpIndex[r] = c;
+			hasNonNeg = true;
+		}
+		if (hasNonNeg == true) {
+			total++;
+			hasNonNeg = false;
+		}
+	}
+
+	return total;
+}
+
+void CarDetection::findVp(vector<Point>& vp) {
+	
+	// compare prev with curr points, if they pass the check they are added to vp
+
+	for (int r = 0; r < currPoints.size(); r++) {
+		for (int c = 0; c < prevPoints.size(); c++) {
+			if (getPointDist(currPoints[r], prevPoints[c]) <= disTol) {
+				vp.push_back(currPoints[r]);
+			}
+		}		
+	}
+}
+
+void CarDetection::setFp_with_Vp(vector<Point>& vp) {
 
 }
 
 void CarDetection::resetFp() {
 	for (int r = 0; r < fpRow; r++) {
 		for (int c = 0; c < fpCol; c++) {
-			foundPoints[r][c] = neg;
+			foundPoints[r][c] = Point(-1,-1);
 		}
+		fpIndex[r] = -1;
 	}
 }
 
-void CarDetection::findVp(vector<Point> vp) {
-
+void CarDetection::resetFpRow(int r) {
+	for (int c = 0; c < fpCol; c++) {
+		foundPoints[r][c] = neg;
+	}
 }
 
 void CarDetection::findSolidLines(Mat& a) {

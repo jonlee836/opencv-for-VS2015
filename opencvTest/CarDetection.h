@@ -40,9 +40,16 @@ private:
 	// fpRow max amount of points it can track at a time
 	static const int fpRow = 30;
 	static const int fpCol = 7;
+	
+	int fpIndex[fpRow];
+
+	// if foundPoints[fpRow][0] is non-neg aka Point(-1,-1)
+	// fpIndex keeps track of the next non-neg
+	// therefore fpIndex[5] = 2 
+	// means foundPoints[5][0] through foundPoints[5][2] is non neg
 
 	Point foundPoints[fpRow][fpCol];
-	Point validPoints[30];
+	Point validPoints[fpRow];
 
 	vector<Point> currPoints, prevPoints;
 
@@ -53,7 +60,7 @@ private:
 	//array<Point, 10> resetRow{ neg };
 
 	const int maxNumbShapes = 20;
-	const int CarCountDistanceTolerance = 40;
+	const int disTol = 40;
 	const int CarMaxCount = 7; // car moved 7 frames in a row
 
 	int CarsCounted = 0;
@@ -99,6 +106,7 @@ public:
 
 	CarDetection::CarDetection() {
 
+		resetFp();
 		// fill array with -1,-1 to note it's empty
 		/*Point a = Point(-1, -1);
 		for (int i = 0; i < foundPoints.size(); i++) {
@@ -168,9 +176,13 @@ public:
 
 	void trackPoints(vector<Point>& foundPoints);
 	
+	int findFpNonNegIndex();
 	void resetFp();
 	void resetFpRow(int r);
-	void findVp(vector<Point> vp);
+
+	void setFp_with_Vp(vector<Point>& vp);
+	void findVp(vector<Point>& vp);
+	
 
 };
 

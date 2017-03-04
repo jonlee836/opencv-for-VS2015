@@ -22,6 +22,6 @@ bool isVPin2dPointArray(array<array<Point, 10>, 30 > a);
 
 Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr);
 
-double getPointdist(Point& a, Point& b);
+double getPointDist(Point& a, Point& b);
 
 #endif // POINTMATH_H
