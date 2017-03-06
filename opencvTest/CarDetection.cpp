@@ -182,6 +182,8 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								break;
 
 							}
+
+							// no matching points found
 							else if (dist > disTol && v + 1 >= validPoints.size()) {
 
 								// If fpIndex[r] is the same size as fpCol that means the car is 
@@ -206,7 +208,6 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								else if (fpLc[r] >= fpLostMin && fpIndex[r] < fpLost_minIndex) {
 									resetFpRow(r);
 								}
-
 							}
 						}
 					}					
