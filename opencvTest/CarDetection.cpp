@@ -19,7 +19,7 @@ void CarDetection::carDetect(Mat& a){
 	GaussianBlur(img, img, Size(5, 5), 3.5, 3.5);
 
 	//cvt2EqualizeIntensity(img);
-	adjustContrast(img, iValueForContrast, iValueForBrightness);
+	//adjustContrast(img, iValueForContrast, iValueForBrightness);
 	//medianBlur(img, img, 11);
 
 	DOH(showAllWindows, nw_blur, img);
@@ -245,72 +245,6 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 	}
 }
 
-void CarDetection::findMotionLines(int r) {
-
-	//  temp[fpCol] should be filled 0-fpCol with points from foundPoints[r][c]
-	
-	// off by one error is using previous foundPoints[r][c] BEFORE it is set to the new vp[r]
-
-	Point temp[fpCol];
-	int foundRow = r;
-
-	for (int tempC = 0; tempC < fpCol; tempC++) {
-		temp[tempC] = foundPoints[foundRow][tempC];
-	}
-
-	/*
-		Option 1.) Find angle temp[0] - temp[6]
-		Option 2.) Average of all angles between temp[0] and temp[6]
-				   Therefore having fpCol - 1 number of angles
-	*/
-
-	// get angle of first and last points
-
-	Point p1 = temp[0];
-	Point p2 = temp[fpCol - 1];
-
-	float angle = atan2(p2.y - p1.y, p2.x - p1.x) * getD;
-
-	if (angle < 0) {
-		angle += 360.0f;
-	}
-
-	line(drawOn, p1, p2, Scalar(0, 0, 255), 2, 8);
-
-	cout << "angle " << angle << " points " << p1 << " , " << p2 << endl;
-
-	for (int r = 0; r < fpRow; r++) {
-		cout << "        fpAngles[" << r << "] = " << fpAngles[r] << endl;
-	}
-
-	for (int r = 0; r < fpRow; r++) {
-
-		// -1.0 fpAngles[c] means it's free to be written to
-
-		if (fpAngles[r] == -1.0) {
-			fpAngles[r] = angle;
-
-			break;
-		}
-		/*
-			End of fpAngles[] is reached and everything is filled with angles.			
-		*/
-		else if (fpAngles[r] != -1.0 && r + 1 >= fpRow){
-
-			// fpAngles_writeOverIndex is 0 at the start
-
-			fpAngles[fpAngles_writeOverIndex] = angle;
-			fpAngles_writeOverIndex++;
-
-			if (fpAngles_writeOverIndex >= fpRow) {
-				fpAngles_writeOverIndex = 0;
-			}
-
-			break;
-		}
-	}
-}
-
 int CarDetection::findFpNonNegIndex() {
 	
 	/*  
@@ -453,6 +387,71 @@ void CarDetection::resetFpRow(int r) {
 	fpLastKnown[r] = Point(-1, -1);
 }
 
+void CarDetection::findMotionLines(int r) {
+
+	//  temp[fpCol] should be filled 0-fpCol with points from foundPoints[r][c]
+
+	// off by one error is using previous foundPoints[r][c] BEFORE it is set to the new vp[r]
+
+	Point temp[fpCol];
+	int foundRow = r;
+
+	for (int tempC = 0; tempC < fpCol; tempC++) {
+		temp[tempC] = foundPoints[foundRow][tempC];
+	}
+
+	/*
+	Option 1.) Find angle temp[0] - temp[6]
+	Option 2.) Average of all angles between temp[0] and temp[6]
+	Therefore having fpCol - 1 number of angles
+	*/
+
+	// get angle of first and last points
+
+	Point p1 = temp[0];
+	Point p2 = temp[fpCol - 1];
+
+	float angle = atan2(p2.y - p1.y, p2.x - p1.x) * getD;
+
+	if (angle < 0) {
+		angle += 360.0f;
+	}
+
+	line(drawOn, p1, p2, Scalar(0, 0, 255), 2, 8);
+
+	//cout << "angle " << angle << " points " << p1 << " , " << p2 << endl;
+/*
+	for (int r = 0; r < fpRow; r++) {
+		cout << "        fpAngles[" << r << "] = " << fpAngles[r] << endl;
+	}*/
+
+	for (int r = 0; r < fpRow; r++) {
+
+		// -1.0 fpAngles[c] means it's free to be written to
+
+		if (fpAngles[r] == -1.0) {
+			fpAngles[r] = angle;
+
+			break;
+		}
+		/*
+		End of fpAngles[] is reached and everything is filled with angles.
+		*/
+		else if (fpAngles[r] != -1.0 && r + 1 >= fpRow) {
+
+			// fpAngles_writeOverIndex is 0 at the start
+
+			fpAngles[fpAngles_writeOverIndex] = angle;
+			fpAngles_writeOverIndex++;
+
+			if (fpAngles_writeOverIndex >= fpRow) {
+				fpAngles_writeOverIndex = 0;
+			}
+
+			break;
+		}
+	}
+}
 void CarDetection::findSolidLines(Mat& a) {
 
 	/*
@@ -482,10 +481,9 @@ void CarDetection::findSolidLines(Mat& a) {
 		for (size_t i = 0; i < linesHlp.size(); i++) {
 
 			Vec4i l = linesHlp[i];
-			Point p1, p2;
-
-			p1 = Point(l[0], l[1]);
-			p2 = Point(l[2], l[3]);
+			
+			Point p1 = Point(l[0], l[1]);
+			Point p2 = Point(l[2], l[3]);
 
 			// angle from found houghline
 			float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
@@ -497,25 +495,16 @@ void CarDetection::findSolidLines(Mat& a) {
 
 			for (int r = 0; r < fpRow && fpAngles[r] != -1; r++) {
 
-
 				// Fix here
-				float angle_1a = fpAngles[r];
-				float angle_2a = fpAngles[r];
+				float ObjAngle = fpAngles[r];
 
-				if (angle_2a + 180 < 360) {
-					angle_2a += 180;
-				}
-				else if (angle_2a - 180 >= 0) {
-					angle_2a -= 180;
-				}
-
-				if (angle < angle_1a + 5 && angle > angle_1a - 5 ||
-					(angle < angle_2a + 5 && angle > angle_2a - 5)) {
-
-					cout << endl;
+				if (ObjAngle <= angle + 5 && ObjAngle > angle - 5){
+					/*cout << endl;
 					cout << "LINE ANGLE = " << angle << endl;
 					cout << "fpAngles[" << r << "]" << " = " << fpAngles[r] << endl;
-					cout << p1 << " , " << p2 << endl;
+					cout << p1 << " , " << p2 << endl;*/
+
+					// cout << "houghline angle = " << angle << " objAngle = " << ObjAngle << endl;
 
 					line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
 

@@ -40,11 +40,11 @@ private:
 	//  --------------------------------------------------------------------------------------------------
 
 	// max distance between points, between frames
-	static const int disTol = 15;
+	static const int disTol = 25;
 
 	static const int fpLost_minIndex = 2;
 	static const int fpLostMin = 3;
-	static const int fpLostMax = 10;
+	static const int fpLostMax = 5;
 
 	static const int fpRow = 30; 	// fpRow max amount of points it can track at a time
 	static const int fpCol = 7; // points tracked
