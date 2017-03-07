@@ -173,10 +173,6 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 									foundPoints[r][0] = validPoints[v];
 									fpLastKnown[r] = validPoints[v];
 									fpConfirmed[r] = true; 	
-
-									//circle(draw, fpLastKnown[r], 2, Scalar(0, 255, 0), 5, 8, 0);
-//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
-//cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << " " << endl;
 								}
 								else {
 									foundPoints[r][c + 1] = validPoints[v];
@@ -473,50 +469,61 @@ void CarDetection::findSolidLines(Mat& a) {
 	arg 5.) threshold : Only those lines with X number of votes
 
 	*/
+	if (fpAngles[0] != -1) {
 
-	Canny(a, a, cannyThresh1, cannyThresh2);
+		vector<Vec4i> linesHlp;
 
-	vector<Vec4i> linesHlp;
+		Canny(a, a, cannyThresh1, cannyThresh2);
+		HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
 
-	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
+		//std::cout << endl;
+		//std::cout << " frame " << frame << endl;
 
-	//std::cout << endl;
-	//std::cout << " frame " << frame << endl;
+		for (size_t i = 0; i < linesHlp.size(); i++) {
 
-	for (size_t i = 0; i < linesHlp.size(); i++) {
+			Vec4i l = linesHlp[i];
+			Point p1, p2;
 
-		Vec4i l = linesHlp[i];
-		Point p1, p2;
+			p1 = Point(l[0], l[1]);
+			p2 = Point(l[2], l[3]);
 
-		p1 = Point(l[0], l[1]);
-		p2 = Point(l[2], l[3]);
+			// angle from found houghline
+			float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
 
-		float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
+			// std::cout << "LINE ANGLE = " << angle << " ****** points " << p1 << " , " << p2 << endl;
 
-		// std::cout << "LINE ANGLE = " << angle << " ****** points " << p1 << " , " << p2 << endl;
+			if (angle < 0) { angle += 360.0f; }
+			//if (angle < 0) {angle = abs(angle) + 180;}
 
-		if (angle < 0) { angle+=360.0f; }
-		//if (angle < 0) {angle = abs(angle) + 180;}
+			for (int r = 0; r < fpRow && fpAngles[r] != -1; r++) {
 
-		for (int r = 0; r < fpRow; r++) {
 
-			float angle1 = fpAngles[r] + 10;
-			float angle2 = fpAngles[r] - 10;
+				// Fix here
+				float angle_1a = fpAngles[r];
+				float angle_2a = fpAngles[r];
 
-			if (angle < angle1 && angle > angle2) {
+				if (angle_2a + 180 < 360) {
+					angle_2a += 180;
+				}
+				else if (angle_2a - 180 >= 0) {
+					angle_2a -= 180;
+				}
 
-				/*cout << endl;
-				cout << "LINE ANGLE = " << angle << endl;
-				cout << "fpAngles["<< r << "]" << " = " << fpAngles[r] << " angle1 = ";
-				cout << angle1 << " angle 2 = " << angle2 << endl;
-				*/
-				line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
+				if (angle < angle_1a + 5 && angle > angle_1a - 5 ||
+					(angle < angle_2a + 5 && angle > angle_2a - 5)) {
 
-				break;
+					cout << endl;
+					cout << "LINE ANGLE = " << angle << endl;
+					cout << "fpAngles[" << r << "]" << " = " << fpAngles[r] << endl;
+					cout << p1 << " , " << p2 << endl;
+
+					line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
+
+					break;
+				}
 			}
 		}
 	}
-
 
 }
 
