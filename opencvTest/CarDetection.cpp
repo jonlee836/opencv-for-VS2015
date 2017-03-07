@@ -403,17 +403,19 @@ void CarDetection::findMotionLines(int r) {
 	Point p1 = temp[0];
 	Point p2 = temp[fpCol - 1];
 
-	float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
-	angle = (int)angle % 360;
+	int angle = getDegrees(p1, p2);
+	//  float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
+	// angle = (int)angle % 360;
 
 	/*if (p2.x < p1.x) {
 		cout << angle << endl;
 		angle += 180;
 	}*/
 
-	if (angle < 0) { angle += 360; }
+	//if (angle < 0) { angle += 360; }
 
 	cout << p1 << " " << p2 << " " << angle << endl;
+
 	line(drawOn, p1, p2, Scalar(0, 0, 255), 2, 8);
 
 	/*
@@ -484,9 +486,11 @@ void CarDetection::findSolidLines(Mat& a) {
 
 			// angle from found houghline
 			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
-			
-			float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;		
-			angle = (int)angle % 360;
+
+			int angle = getDegrees(p1, p2);
+
+			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;		
+			//angle = (int)angle % 360;
 
 			if (angle < 0) { angle+= 360; }
 
@@ -499,7 +503,7 @@ void CarDetection::findSolidLines(Mat& a) {
 				if (ObjAngle2 + 180 < 360) {
 					ObjAngle2 += 180;
 				}
-				else if (ObjAngle2 - 180 >= 0) {
+				else if (ObjAngle2 - 180 > 0) {
 					ObjAngle2 -= 180;
 				}
 
@@ -513,7 +517,6 @@ void CarDetection::findSolidLines(Mat& a) {
 					cout << p1 << " , " << p2 << endl;*/
 
 					// cout << ObjAngle << " : " << ObjAngle2 << endl;
-
 					// cout << "houghline angle = " << angle << " objAngle = " << ObjAngle << endl;
 
 					line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);

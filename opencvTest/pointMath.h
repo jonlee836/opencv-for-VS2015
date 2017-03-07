@@ -21,6 +21,7 @@ bool is2dPointArrayNeg(array<array<Point, 10>, 30 > a);
 Point getMidpoint(Point a, Point b);
 Point getShapeCenter(vector <Point>& contour);
 Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr);
+int getDegrees(Point a, Point b);
 
 double getPointDist(Point& a, Point& b);
 

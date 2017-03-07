@@ -52,7 +52,13 @@ float getRadians2Degrees(Point a, Point b) {
 	if (val < 0) val = 360 + val;
 
 	return val;
+}
 
+int getDegrees(Point a, Point b) {
+	int angle = atan2(a.y - b.y, a.x - b.x) * getD;
+	angle = (int)angle % 360;
+	
+	return angle;
 }
 
 double getPointDist(Point& a, Point& b) {
