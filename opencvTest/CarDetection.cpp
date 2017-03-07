@@ -480,8 +480,8 @@ void CarDetection::findSolidLines(Mat& a) {
 
 	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
 
-	std::cout << endl;
-	std::cout << " frame " << frame << endl;
+	//std::cout << endl;
+	//std::cout << " frame " << frame << endl;
 
 	for (size_t i = 0; i < linesHlp.size(); i++) {
 
