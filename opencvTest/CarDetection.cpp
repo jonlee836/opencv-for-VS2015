@@ -91,9 +91,10 @@ void CarDetection::carDetect(Mat& a){
 
 	//cout << " frame : " << frame << " ";
 
+
+	// findMotionLines(r) at line 167
 	trackPoints(currPoints, drawOn);
 	
-	findMotionLines();
 	findSolidLines(img);
 
 	DOH(showAllWindows, nw_canny, img);
@@ -157,10 +158,16 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								// and reset the current row
 								//circle(draw, foundPoints[r][c], 2, Scalar(0, 255, 0), 5, 8, 0);
 								fpLc[r] = 0;
-
+								
+								// foundPoints start writing over itself
 								if (c + 1 >= fpCol) {
-
-									// foundPoints start writing over itself
+									
+									// save column before writing over
+									
+									foundPoints[r][0] = validPoints[v];
+									findMotionLines(r);
+									line(drawOn, foundPoints[r][0], validPoints[v], Scalar(0, 0, 255), 2, 8);
+									// reset row to Point(-1,-1)
 									resetFpRow(r);
 
 									foundPoints[r][0] = validPoints[v];
@@ -168,8 +175,8 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 									fpConfirmed[r] = true; 	
 
 									//circle(draw, fpLastKnown[r], 2, Scalar(0, 255, 0), 5, 8, 0);
-									//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
-									//cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << " " << endl;
+//cout << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
+//cout << " vp[" << r << "] = " << validPoints[v] << " fpIndex " << fpIndex[r] << " " << endl;
 								}
 								else {
 									foundPoints[r][c + 1] = validPoints[v];
@@ -198,11 +205,11 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 
 										//cout << "dist = " << dist << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
 										//cout << "dist = " << dist << " drawing at fpLastKnown[" << r << "] = " << fpLastKnown[r] << endl;
-										
-										CarsCounted++;
-										cout << "cars counted : " << CarsCounted << endl;
 
-										circle(draw, fpLastKnown[r], 2, Scalar(0, 0, 255), 8, 8, 0);										
+										CarsCounted++;
+										std::cout << "cars counted : " << CarsCounted << endl;
+
+										circle(draw, fpLastKnown[r], 2, Scalar(0, 0, 255), 8, 8, 0);
 										resetFpRow(r);
 									}
 								}
@@ -211,11 +218,11 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								}
 							}
 						}
-					}					
-				}				
+					}
+				}
 				// remaining validPoints[v] that haven't been set to -1,-1 are put in foundPoints[r][0]
 				setFp_with_Vp(validPoints);
-			}		
+			}
 		}
 		else {
 
@@ -232,7 +239,7 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 					else {
 						fpLc[r]++;
 					}
-				}				
+				}
 			}
 		}
 
@@ -241,11 +248,57 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 	}
 }
 
-void CarDetection::findMotionLines() {
+void CarDetection::findMotionLines(int r) {
+
+	//  temp[fpCol] should be filled 0-fpCol with points from foundPoints[r][c]
+	
+	// off by one error is using previous foundPoints[r][c] BEFORE it is set to the new vp[r]
+
+	Point temp[fpCol];
+	int foundRow = r;
+
+	for (int tempC = 0; tempC < fpCol; tempC++) {
+		temp[tempC] = foundPoints[foundRow][tempC];
+	}
+
+	/*
+		Option 1.) Find angle temp[0] - temp[6]
+		Option 2.) Average of all angles between temp[0] and temp[6]
+				   Therefore having fpCol - 1 number of angles
+	*/
+
+	// get angle of first and last points
+
+	Point p1 = temp[0];
+	Point p2 = temp[fpCol - 1];
+
+	float angle = atan2(p2.y - p1.y, p2.x - p1.x) * getD;
+
+	if (angle < 0) { angle += 360.0f; }
 
 	for (int r = 0; r < fpRow; r++) {
-		if (fpConfirmed[r]) {
-			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
+
+		// -1.0 fpAngles[c] means it's free to be written to
+
+		if (fpAngles[r] == -1.0) {
+			fpAngles[r] = angle;
+			break;
+		}
+
+		/*
+			End of fpAngles[] is reached and everything is filled with angles.
+			
+		*/
+
+		else if (fpAngles[r] != -1.0 && r + 1 >= fpRow){
+			// fpAngles_writeOverIndex is 0 at the start
+			fpAngles[fpAngles_writeOverIndex] = angle;
+			fpAngles_writeOverIndex++;
+
+			if (fpAngles_writeOverIndex >= fpRow) {
+				fpAngles_writeOverIndex = 0;
+			}
+			break;
 		}
 	}
 }
@@ -415,6 +468,9 @@ void CarDetection::findSolidLines(Mat& a) {
 
 	HoughLinesP(a, linesHlp, linesRho, getR, linesThresh, linesMinLength, linesMaxGap);
 
+	std::cout << endl;
+	std::cout << " frame " << frame << endl;
+
 	for (size_t i = 0; i < linesHlp.size(); i++) {
 
 		Vec4i l = linesHlp[i];
@@ -424,16 +480,37 @@ void CarDetection::findSolidLines(Mat& a) {
 		p2 = Point(l[2], l[3]);
 
 		float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
-		
-		if (angle < 0) {angle = abs(angle) + 180;}
+
+		// std::cout << "LINE ANGLE = " << angle << " ****** points " << p1 << " , " << p2 << endl;
+
+		if (angle < 0) { angle+=360.0f; }
+		//if (angle < 0) {angle = abs(angle) + 180;}
+
+		for (int r = 0; r < fpRow; r++) {
+
+			float angle1 = fpAngles[r] + 10.0f;
+			float angle2 = fpAngles[r] - 10.0f;
+
+			if (angle < angle1 && angle > angle2) {
+
+				/*cout << endl;
+				cout << "LINE ANGLE = " << angle << endl;
+				cout << "fpAngles["<< r << "]" << " = " << fpAngles[r] << " angle1 = ";
+				cout << angle1 << " angle 2 = " << angle2 << endl;
+				*/
+				line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
+
+				break;
+			}
+		}
 
 		//cout << p1 << " " << p2 << " angle " << angle << endl;
 
-		if ((angle > minD1 && angle < maxD1) || 
+	/*	if ((angle > minD1 && angle < maxD1) || 
 			(angle > minD2 && angle < maxD2)){
 
 			line(drawOn, p1, p2, Scalar(255, 150, 0), 2, 8);
-		}
+		}*/
 	}
 
 

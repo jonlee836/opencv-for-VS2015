@@ -36,10 +36,11 @@ private:
 	int showAll = 0;
 	int frame = 0;
 
-	// point counter --------------------------------------------------------------------------------------------------
+	// POINT COUNTER
+	//  --------------------------------------------------------------------------------------------------
 
 	// max distance between points, between frames
-	static const int disTol = 35;
+	static const int disTol = 15;
 
 	static const int fpLost_minIndex = 4;
 	static const int fpLostMin = 3;
@@ -66,9 +67,18 @@ private:
 		If fpLc[fpRow] prevents (hopefully) the tracker from getting confused if it loses a target for a few frames
 	*/
 
+	int fpAngles_writeOverIndex = 0;
+	/*
+		When fpAngles[fpRow] 
+	*/
+
+	float fpAngles[fpRow];
+	/*		
+		Measures the angle of objects as they travel in the image
+	*/
+
 	Point fpLastKnown[fpRow];
 	Point foundPoints[fpRow][fpCol];
-	Point validPoints[fpRow];
 
 	vector<Point> currPoints, prevPoints;
 
@@ -76,6 +86,7 @@ private:
 	int CarsCounted = 0;
 	
 	//-----------------------------------------------------------------------------------------------------------------
+
 	Vec4i carlines[fpRow];
 
 	int ContourRetreivalMode = 0;
@@ -122,16 +133,7 @@ private:
 public:
 
 	CarDetection::CarDetection() {
-		
-		for (int r = 0; r < fpRow; r++) {
-			for (int c = 0; c < fpCol; c++) {
-				foundPoints[r][c] = Point(-1, -1);
-			}
-			fpLc[r] = 0;
-			fpIndex[r] = -1;
-			fpConfirmed[r] = false;
-			fpLastKnown[r] = Point(-1, -1);
-		}
+	
 		//resetFp();
 		// fill array with -1,-1 to note it's empty
 		/*Point a = Point(-1, -1);
@@ -141,6 +143,20 @@ public:
 				cout << foundPoints[i][k] << endl;
 			}
 		}*/
+
+		for (int r = 0; r < fpRow; r++) {
+			for (int c = 0; c < fpCol; c++) {
+				foundPoints[r][c] = Point(-1, -1);
+			}
+			fpLc[r] = 0;
+			fpIndex[r] = -1;
+			fpConfirmed[r] = false;
+			fpLastKnown[r] = Point(-1, -1);
+		}
+
+		for (int c = 0; c < fpCol; c++) {
+			fpAngles[c] = -1.0;
+		}
 
 		namedWindow(tbCar, WINDOW_NORMAL);
 
@@ -200,7 +216,7 @@ public:
 	void carDetect(Mat& a);
 	void findSolidLines(Mat&a);
 	void trackPoints(vector<Point>& foundPoints, Mat& draw);
-	void findMotionLines();
+	void findMotionLines(int r);
 
 	int findFpNonNegIndex();
 
