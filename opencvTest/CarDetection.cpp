@@ -209,7 +209,8 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 										CarsCounted++;
 										std::cout << "cars counted : " << CarsCounted << endl;
 
-										circle(draw, fpLastKnown[r], 2, Scalar(0, 0, 255), 8, 8, 0);
+										circle(draw, fpLastKnown[r], 2, Scalar(0, 0, 255), 8, 8, 0);									
+
 										resetFpRow(r);
 									}
 								}
@@ -280,11 +281,15 @@ void CarDetection::findMotionLines(int r) {
 
 	line(drawOn, p1, p2, Scalar(0, 0, 255), 2, 8);
 
+	cout << "angle " << angle << " points " << p1 << " , " << p2 << endl;
+
+	for (int r = 0; r < fpRow; r++) {
+		cout << "        fpAngles[" << r << "] = " << fpAngles[r] << endl;
+	}
+
 	for (int r = 0; r < fpRow; r++) {
 
 		// -1.0 fpAngles[c] means it's free to be written to
-
-		cout << "angles " << angle << " points " << p1 << " , " << p2 << endl;
 
 		if (fpAngles[r] == -1.0) {
 			fpAngles[r] = angle;

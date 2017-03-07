@@ -154,7 +154,7 @@ public:
 			fpLastKnown[r] = Point(-1, -1);
 		}
 
-		for (int c = 0; c < fpCol; c++) {
+		for (int c = 0; c < fpRow; c++) {
 			fpAngles[c] = -1.0;
 		}
 
