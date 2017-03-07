@@ -158,7 +158,6 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								//circle(draw, foundPoints[r][c], 2, Scalar(0, 255, 0), 5, 8, 0);
 								fpLc[r] = 0;
 
-
 								if (c + 1 >= fpCol) {
 
 									// foundPoints start writing over itself
@@ -184,11 +183,13 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 							}
 
 							// no matching points found
+
 							else if (dist > disTol && v + 1 >= validPoints.size()) {
 
 								// If fpIndex[r] is the same size as fpCol that means the car is 
 								// confirmed and it's safe to stop tracking.
 								// Either way you reset the row at foundPoints[r]
+
 								fpLc[r]++;
 
 								if (fpConfirmed[r]) {
@@ -247,7 +248,6 @@ void CarDetection::findMotionLines() {
 			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
 		}
 	}
-
 }
 
 int CarDetection::findFpNonNegIndex() {

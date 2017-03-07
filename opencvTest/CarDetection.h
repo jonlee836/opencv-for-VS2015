@@ -3,7 +3,6 @@
 #ifndef CARDETECTION_H
 #define CARDETECTION_H
 
-#include "opencv2/core.hpp"
 #include <opencv2/core/utility.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
