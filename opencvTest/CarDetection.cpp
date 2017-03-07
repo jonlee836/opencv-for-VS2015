@@ -200,13 +200,9 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 
 									if (fpLc[r] >= fpLostMax) {
 
-										//cout << "dist = " << dist << " fp[" << r << "]" << "[" << c << "] = " << foundPoints[r][c] << endl;
-										//cout << "dist = " << dist << " drawing at fpLastKnown[" << r << "] = " << fpLastKnown[r] << endl;
-
 										CarsCounted++;
-										std::cout << "cars counted : " << CarsCounted << endl;
-
 										circle(draw, fpLastKnown[r], 2, Scalar(0, 0, 255), 8, 8, 0);									
+										std::cout << "cars counted : " << CarsCounted << endl;
 
 										resetFpRow(r);
 									}

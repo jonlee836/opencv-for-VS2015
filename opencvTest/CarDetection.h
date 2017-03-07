@@ -78,6 +78,7 @@ private:
 		Measures the angle of objects as they travel in the image
 	*/
 
+	Point fpFirstKnown[fpRow];
 	Point fpLastKnown[fpRow];
 	Point foundPoints[fpRow][fpCol];
 
