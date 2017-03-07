@@ -72,7 +72,8 @@ private:
 		When fpAngles[fpRow] 
 	*/
 
-	float fpAngles[fpRow];
+	static const int fpAnglesSize = 8;
+	float fpAngles[fpAnglesSize];
 	/*		
 		Measures the angle of objects as they travel in the image
 	*/
@@ -104,7 +105,7 @@ private:
 
 	int linesRho = 1;
 	int linesTheta = 180;
-	int linesThresh = 160;
+	int linesThresh = 50;
 	int linesMinLength = 150;
 	int linesMaxGap = 100;
 

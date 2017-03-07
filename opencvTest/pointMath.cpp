@@ -7,11 +7,24 @@ bool checkEdgeDist(Point& a, int dist2Edge, int imgWidth, int imgHeight) {
 	}
 }
 
+bool is2dPointArrayNeg(array<array<Point, 10>, 30 > a) {
+	for (int r = 0; r < a.size(); r++) {
+		for (int c = 0; c < a[r].size(); c++) {
+			a[r][c] = Point(-1, -1);
+		}
+	}
+}
+
 Point getMidpoint(Point a, Point b) {
 	return Point((a.x + b.x) / 2, (a.y + b.y) / 2);
 }
 
 Point getShapeCenter(vector <Point>& contour) {
+
+	//Moments moment01 = moments(contour, false);
+
+	//Point objCenter = Point(moment01.m10 / moment01.m00, moment01.m01 / moment01.m00);
+
 	Rect a = boundingRect(Mat(contour));
 	Point objCenter = a.br() + a.tl();
 
@@ -19,14 +32,6 @@ Point getShapeCenter(vector <Point>& contour) {
 	objCenter.y /= 2;
 
 	return objCenter;
-}
-
-bool is2dPointArrayNeg(array<array<Point, 10>, 30 > a) {
-	for (int r = 0; r < a.size(); r++) {
-		for (int c = 0; c < a[r].size(); c++) {
-			a[r][c] = Point(-1, -1);
-		}
-	}
 }
 
 Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr) {

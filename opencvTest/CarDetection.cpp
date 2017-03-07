@@ -391,7 +391,6 @@ void CarDetection::resetFpRow(int r) {
 void CarDetection::findMotionLines(int r) {
 
 	//  temp[fpCol] should be filled 0-fpCol with points from foundPoints[r][c]
-
 	// off by one error is using previous foundPoints[r][c] BEFORE it is set to the new vp[r]
 
 	Point temp[fpCol];
@@ -410,13 +409,15 @@ void CarDetection::findMotionLines(int r) {
 
 	float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
 	angle = (int)angle % 360;
-	if (p2.x < p1.x) angle += 180;
-	if (angle < 0) angle = 360 + angle;
-	/*if (angle < 0) {
+
+	/*if (p2.x < p1.x) {
+		cout << angle << endl;
 		angle += 180;
 	}*/
-	
 
+	if (angle < 0) { angle += 360; }
+
+	cout << p1 << " " << p2 << " " << angle << endl;
 	line(drawOn, p1, p2, Scalar(0, 0, 255), 2, 8);
 
 	/*
@@ -425,9 +426,9 @@ void CarDetection::findMotionLines(int r) {
 	*/
 
 
-	for (int r = 0; r < fpRow; r++) {
+	for (int r = 0; r < fpAnglesSize; r++) {
 
-		// -1.0 fpAngles[c] means it's free to be written to
+		// fpAngles[c] = -1 means it's free to be written to
 
 		if (fpAngles[r] == -1.0) {
 			fpAngles[r] = angle;
@@ -437,14 +438,14 @@ void CarDetection::findMotionLines(int r) {
 		/*
 		End of fpAngles[] is reached and everything is filled with angles.
 		*/
-		else if (fpAngles[r] != -1.0 && r + 1 >= fpRow) {
+		else if (fpAngles[r] != -1.0 && r + 1 >= fpAnglesSize) {
 
 			// fpAngles_writeOverIndex is 0 at the start
 
 			fpAngles[fpAngles_writeOverIndex] = angle;
 			fpAngles_writeOverIndex++;
 
-			if (fpAngles_writeOverIndex >= fpRow) {
+			if (fpAngles_writeOverIndex >= fpAnglesSize) {
 				fpAngles_writeOverIndex = 0;
 			}
 
@@ -490,23 +491,32 @@ void CarDetection::findSolidLines(Mat& a) {
 			
 			float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;		
 			angle = (int)angle % 360;
-			if (p2.x < p1.x) angle += 180;
-			if (angle < 0) angle = 360 + angle;
 
-			//if (angle < 0) { angle += 180; }
-			//if (angle < 0) {angle = abs(angle) + 180;}
+			if (angle < 0) { angle+= 360; }
 
-			for (int r = 0; r < fpRow && fpAngles[r] != -1; r++) {
+			for (int r = 0; r < fpAnglesSize && fpAngles[r] != -1; r++) {
 
 				// Fix here
-				float ObjAngle = fpAngles[r];
+				int ObjAngle = fpAngles[r];			
+				int ObjAngle2 = fpAngles[r];
+
+				if (ObjAngle2 + 180 < 360) {
+					ObjAngle2 += 180;
+				}
+				else if (ObjAngle2 - 180 >= 0) {
+					ObjAngle2 -= 180;
+				}
+
 				// std::cout << "LINE ANGLE = " << angle << " OBJ ANGLE " << ObjAngle << " ****** points " << p1 << " , " << p2 << endl;
 
-				if (ObjAngle <= angle + 5 && ObjAngle > angle - 5){
+				if ((ObjAngle <= angle + 5 && ObjAngle > angle - 5) || 
+					ObjAngle2 <= angle + 5 && ObjAngle2 > angle - 5){
 					/*cout << endl;
 					cout << "LINE ANGLE = " << angle << endl;
 					cout << "fpAngles[" << r << "]" << " = " << fpAngles[r] << endl;
 					cout << p1 << " , " << p2 << endl;*/
+
+					// cout << ObjAngle << " : " << ObjAngle2 << endl;
 
 					// cout << "houghline angle = " << angle << " objAngle = " << ObjAngle << endl;
 
