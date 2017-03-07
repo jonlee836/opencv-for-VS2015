@@ -35,6 +35,21 @@ Point reset2dPointArrayRow(array<array<Point, 10>, 30 > a, int rr) {
 	}
 }
 
+float getRadians2Degrees(Point a, Point b) {
+	float angle = atan2(a.y - b.y, a.x - b.x) * getD;
+
+	float val = (b.y - a.y) / (b.x - a.x);           // calculate slope between the two points
+	
+	//val = val - pow(val, 3) / 3 + pow(val, 5) / 5; // find arc tan of the slope using taylor series approximation
+	val = ((int)(val * getD)) % 360;               // Convert the angle in radians to degrees
+	
+	if (b.x < a.x) val += 180;
+	if (val < 0) val = 360 + val;
+
+	return val;
+
+}
+
 double getPointDist(Point& a, Point& b) {
 	double distance = norm(a - b);
 

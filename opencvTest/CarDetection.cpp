@@ -51,7 +51,7 @@ void CarDetection::carDetect(Mat& a){
 
 	DOH(showAllWindows, nw_thresh_before, blob);
 
-	RemoveBySize(blob, 500);
+	RemoveBySize(blob, 50);
 	ErodeDilate(blob, erodeAmount, dilateAmount, 2);
 	findContours(blob, contours, ContourRetreivalMode, CV_CHAIN_APPROX_SIMPLE);
 	
@@ -78,7 +78,7 @@ void CarDetection::carDetect(Mat& a){
 
 	for (int i = 0; i < contours.size() && i < 1000; i++) {
 		
-		approxPolyDP(Mat(contours[i]), contours[i], 0, true);
+		//approxPolyDP(Mat(contours[i]), contours[i], 0, true);
 
 		drawContours(drawOn, contours, i, Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
 		drawContours(drawOn, hull, i, Scalar(0, 0, 255), 1, 8, vector<Vec4i>(), 0, Point());
@@ -157,6 +157,7 @@ void CarDetection::trackPoints(vector<Point>& a, Mat& draw) {
 								// when the final position of foundPoints[r][c] is filled iterate the car counter
 								// and reset the current row
 								//circle(draw, foundPoints[r][c], 2, Scalar(0, 255, 0), 5, 8, 0);
+								
 								fpLc[r] = 0;
 								
 								// foundPoints start writing over itself
@@ -401,29 +402,28 @@ void CarDetection::findMotionLines(int r) {
 	}
 
 	/*
-	Option 1.) Find angle temp[0] - temp[6]
-	Option 2.) Average of all angles between temp[0] and temp[6]
-	Therefore having fpCol - 1 number of angles
+		Option 1.) Find angle temp[0] - temp[6]		
 	*/
-
-	// get angle of first and last points
-
+	
 	Point p1 = temp[0];
 	Point p2 = temp[fpCol - 1];
 
-	float angle = atan2(p2.y - p1.y, p2.x - p1.x) * getD;
-
-	if (angle < 0) {
-		angle += 360.0f;
-	}
+	float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
+	angle = (int)angle % 360;
+	if (p2.x < p1.x) angle += 180;
+	if (angle < 0) angle = 360 + angle;
+	/*if (angle < 0) {
+		angle += 180;
+	}*/
+	
 
 	line(drawOn, p1, p2, Scalar(0, 0, 255), 2, 8);
 
-	//cout << "angle " << angle << " points " << p1 << " , " << p2 << endl;
-/*
-	for (int r = 0; r < fpRow; r++) {
-		cout << "        fpAngles[" << r << "] = " << fpAngles[r] << endl;
-	}*/
+	/*
+		Option 2.) Average of all angles between temp[0] and temp[6]
+		Therefore having fpCol - 1 number of angles
+	*/
+
 
 	for (int r = 0; r < fpRow; r++) {
 
@@ -486,17 +486,21 @@ void CarDetection::findSolidLines(Mat& a) {
 			Point p2 = Point(l[2], l[3]);
 
 			// angle from found houghline
-			float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
+			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
+			
+			float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;		
+			angle = (int)angle % 360;
+			if (p2.x < p1.x) angle += 180;
+			if (angle < 0) angle = 360 + angle;
 
-			// std::cout << "LINE ANGLE = " << angle << " ****** points " << p1 << " , " << p2 << endl;
-
-			if (angle < 0) { angle += 360.0f; }
+			//if (angle < 0) { angle += 180; }
 			//if (angle < 0) {angle = abs(angle) + 180;}
 
 			for (int r = 0; r < fpRow && fpAngles[r] != -1; r++) {
 
 				// Fix here
 				float ObjAngle = fpAngles[r];
+				// std::cout << "LINE ANGLE = " << angle << " OBJ ANGLE " << ObjAngle << " ****** points " << p1 << " , " << p2 << endl;
 
 				if (ObjAngle <= angle + 5 && ObjAngle > angle - 5){
 					/*cout << endl;
