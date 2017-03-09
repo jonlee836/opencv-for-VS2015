@@ -91,7 +91,6 @@ void CarDetection::carDetect(Mat& a){
 
 	//cout << " frame : " << frame << " ";
 
-
 	// findMotionLines(r) at line 167
 	trackPoints(currPoints, drawOn);
 	
@@ -489,7 +488,7 @@ void CarDetection::findSolidLines(Mat& a) {
 
 			int angle = getDegrees(p1, p2);
 
-			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;		
+			//float angle = atan2(p1.y - p2.y, p1.x - p2.x) * getD;
 			//angle = (int)angle % 360;
 
 			if (angle < 0) { angle+= 360; }
