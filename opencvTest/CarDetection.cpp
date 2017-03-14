@@ -374,9 +374,11 @@ void CarDetection::resetFp() {
 }
 
 void CarDetection::resetFpRow(int r) {
+
 	for (int c = 0; c < fpCol; c++) {
 		foundPoints[r][c] = neg;
 	}
+
 	fpLc[r] = 0;
 	fpIndex[r] = -1;
 	fpConfirmed[r] = false;
@@ -450,6 +452,7 @@ void CarDetection::findMotionLines(int r) {
 		}
 	}
 }
+
 void CarDetection::findSolidLines(Mat& a) {
 
 	/*

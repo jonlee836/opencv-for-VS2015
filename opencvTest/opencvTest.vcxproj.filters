@@ -45,6 +45,9 @@
     <ClCompile Include="threshImg.cpp">
       <Filter>Source Files\functions</Filter>
     </ClCompile>
+    <ClCompile Include="drawOnMat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parseVideoInput.h">
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="threshImg.h">
       <Filter>Source Files\functions</Filter>
+    </ClInclude>
+    <ClInclude Include="drawOnMat.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

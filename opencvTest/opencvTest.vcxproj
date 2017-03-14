@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="analyzePoints.cpp" />
+    <ClCompile Include="drawOnMat.cpp" />
     <ClCompile Include="threshImg.cpp" />
     <ClCompile Include="displayMats.cpp" />
     <ClCompile Include="main.cpp" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="analyzePoints.h" />
     <ClInclude Include="displayMats.h" />
+    <ClInclude Include="drawOnMat.h" />
     <ClInclude Include="threshImg.h" />
     <ClInclude Include="parseImageInput.h" />
     <ClInclude Include="parseVideoInput.h" />

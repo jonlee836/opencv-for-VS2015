@@ -40,6 +40,7 @@ private:
 	//  --------------------------------------------------------------------------------------------------
 
 	// max distance between points, between frames
+
 	static const int disTol = 35;
 
 	static const int fpLost_minIndex = 2;
@@ -192,6 +193,7 @@ public:
 		createTrackbar("maxD 1", tbCar, &maxD1, DEGREES);
 		createTrackbar("minD 2", tbCar, &minD2, DEGREES);
 		createTrackbar("maxD 2", tbCar, &maxD2, DEGREES);
+
 		createTrackbar("show all", tbCar, &showAll, 1);
 
 		createTrackbar("ContourRetreivalMode", tbCar, &ContourRetreivalMode, 0);
@@ -227,7 +229,6 @@ public:
 	void setFp_with_Vp(vector<Point>& vp);
 	void findVp(vector<Point>& vp);
 	
-
 };
 
 
