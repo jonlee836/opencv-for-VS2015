@@ -17,6 +17,8 @@
 #include "displayMats.h"
 #include "shapeMats.h"
 
+#include "drawOnMat.h"
+
 using namespace cv;
 using namespace std;
 
